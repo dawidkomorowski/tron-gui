@@ -26,10 +26,27 @@ class TronBoardRenderer {
         const drawX = x * this.tilePixelsWidth;
         const drawY = y * this.tilePixelsHeight;
 
-        // TODO mark heads
         this._context.fillStyle = this._convertTileStateToColor(tileState);
+        this._context.beginPath();
         this._context.fillRect(drawX, drawY, this.tilePixelsWidth, this.tilePixelsHeight);
         this._context.rect(drawX, drawY, this.tilePixelsWidth, this.tilePixelsHeight);
+        this._context.stroke();
+
+        if (this._isHead(tileState)) {
+            this._context.beginPath();
+
+            this._context.moveTo(drawX + this.tilePixelsWidth * 0.35, drawY + this.tilePixelsHeight * 0.25);
+            this._context.lineTo(drawX + this.tilePixelsWidth * 0.35, drawY + this.tilePixelsHeight * 0.75);
+
+            this._context.moveTo(drawX + this.tilePixelsWidth * 0.35, drawY + this.tilePixelsHeight * 0.5);
+            this._context.lineTo(drawX + this.tilePixelsWidth * 0.65, drawY + this.tilePixelsHeight * 0.5);
+
+            this._context.moveTo(drawX + this.tilePixelsWidth * 0.65, drawY + this.tilePixelsHeight * 0.25);
+            this._context.lineTo(drawX + this.tilePixelsWidth * 0.65, drawY + this.tilePixelsHeight * 0.75);
+
+            this._context.stroke();
+        }
+
         this._context.stroke();
     }
 
@@ -44,6 +61,10 @@ class TronBoardRenderer {
             case TronBoardEnum.BlueHead:
                 return "#0000FF";
         }
+    }
+
+    _isHead(tileState) {
+        return tileState === TronBoardEnum.RedHead || tileState === TronBoardEnum.BlueHead;
     }
 }
 
