@@ -1,21 +1,19 @@
 {
-  "name": "electron-quick-start",
-  "version": "1.0.0",
-  "description": "A minimal Electron application",
-  "main": "main.js",
+  "name": "tron-gui",
+  "version": "0.1.0",
+  "description": "GUI platform for running Tron bots duels.",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/dawidkomorowski/tron-gui",
   "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
+    "Tron",
+    "bot",
+    "GUI"
   ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
+  "author": "Dawid Komorowski",
+  "license": "MIT",
   "devDependencies": {
     "electron": "~1.7.8"
   }
