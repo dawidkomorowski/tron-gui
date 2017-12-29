@@ -6,7 +6,7 @@ const TronBoard = require("./tronBoard").TronBoard;
 const TronBoardRenderer = require("./tronBoardRenderer").TronBoardRenderer;
 
 let tronBoardRenderer = new TronBoardRenderer("tronBoardCanvas");
-let tronBoard = new TronBoard();
+let tronBoard = new TronBoard("B9/10/10/10/10/10/10/10/10/9R");
 
 tronBoardRenderer.tronBoard = tronBoard;
 tronBoardRenderer.render();
