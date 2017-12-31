@@ -6,11 +6,11 @@ class TronBoard {
 
         let rowStrings = tronString.split("/");
 
-        this._width = this._readWidthFromTronStringRow(rowStrings[0]);
+        this._width = this._readTilesFromTronStringRow(rowStrings[0]).length;
         this._height = rowStrings.length;
 
         for (let i = 0; i < rowStrings.length; i++) {
-            if (this._width !== this._readWidthFromTronStringRow(rowStrings[i])) {
+            if (this._width !== this._readTilesFromTronStringRow(rowStrings[i]).length) {
                 throw "Error at row index: " + i + " value: " + rowStrings[i] + ". tronString must define rectangular board.";
             }
         }
@@ -18,7 +18,7 @@ class TronBoard {
         this._board = [];
         for (let x = 0; x < this._width; x++) {
             this._board[x] = [];
-            
+
             for (let y = 0; y < this._height; y++) {
                 let tiles = this._readTilesFromTronStringRow(rowStrings[y])
                 this._board[x][y] = tiles[x];
@@ -35,24 +35,6 @@ class TronBoard {
 
     toTronString() {
         return "B9/10/10/10/10/10/10/10/9R/9r";
-    }
-
-    _readWidthFromTronStringRow(tronStringRow) {
-        let width = 0;
-
-        for (let i = 0; i < tronStringRow.length; i++) {
-            if (tronStringRow[i] === "b" || tronStringRow[i] === "B" || tronStringRow[i] === "r" || tronStringRow[i] === "R") {
-                width++;
-            }
-
-            // TODO handle multidigit numbers
-            let emptyTilesCount = parseInt(tronStringRow[i]);
-            if (emptyTilesCount) {
-                width += emptyTilesCount;
-            }
-        }
-
-        return width;
     }
 
     _readTilesFromTronStringRow(tronStringRow) {
@@ -72,7 +54,14 @@ class TronBoard {
                 tiles.push(TronBoardEnum.RedHead);
             }
 
-            let emptyTilesCount = parseInt(tronStringRow[i]);
+            let emptyTilesCountString = "";
+            while (i < tronStringRow.length && Number.isInteger(parseInt(tronStringRow[i]))) {
+                emptyTilesCountString += tronStringRow[i];
+                i++;
+            }
+            if (emptyTilesCountString) i--;
+
+            let emptyTilesCount = parseInt(emptyTilesCountString);
             if (emptyTilesCount) {
                 for (let j = 0; j < emptyTilesCount; j++) {
                     tiles.push(TronBoardEnum.Empty);
