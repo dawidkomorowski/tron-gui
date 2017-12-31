@@ -1,4 +1,4 @@
-const TronBoardEnum = require("./tronBoard").TronBoardEnum;
+const TronStringEnum = require("./tronString").TronStringEnum;
 
 class TronBoardRenderer {
     constructor(canvasId) {
@@ -52,19 +52,19 @@ class TronBoardRenderer {
 
     _convertTileStateToColor(tileState) {
         switch (tileState) {
-            case TronBoardEnum.Empty:
+            case TronStringEnum.Empty:
                 return "#FFFFFF";
-            case TronBoardEnum.Red:
-            case TronBoardEnum.RedHead:
+            case TronStringEnum.Red:
+            case TronStringEnum.RedHead:
                 return "#FF0000";
-            case TronBoardEnum.Blue:
-            case TronBoardEnum.BlueHead:
+            case TronStringEnum.Blue:
+            case TronStringEnum.BlueHead:
                 return "#0000FF";
         }
     }
 
     _isHead(tileState) {
-        return tileState === TronBoardEnum.RedHead || tileState === TronBoardEnum.BlueHead;
+        return tileState === TronStringEnum.RedHead || tileState === TronStringEnum.BlueHead;
     }
 }
 
