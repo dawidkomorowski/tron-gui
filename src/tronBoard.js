@@ -28,7 +28,14 @@ class TronBoard {
     }
 
     toTronString() {
-        return new TronString();
+        const tronString = new TronString(this.width, this.height);
+        for (let x = 0; x < this.width; x++) {
+            for (let y = 0; y < this.height; y++) {
+                tronString.setElementAt(x, y, this.getElementAt(x, y));
+            }
+        }
+
+        return tronString;
     }
 }
 
