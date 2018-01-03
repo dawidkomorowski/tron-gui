@@ -24,13 +24,31 @@ class TronString {
     get height() { return this._height; }
 
     getElementAt(x, y) {
-        // TODO validate?
+        this._validateCoordinates(x, y);
         return this._elements[x][y];
     }
 
     setElementAt(x, y, value) {
-        // TODO validate
+        this._validateCoordinates(x, y);
+        this._validateValue(value);
         this._elements[x][y] = value;
+    }
+
+    _validateCoordinates(x, y) {
+        if (x < 0) throw new Error("x cannot be negative.");
+        if (y < 0) throw new Error("y cannot be negative.");
+        if (x >= this.width) throw new Error("x cannot be greater or equal width.")
+        if (y >= this.height) throw new Error("y cannot be greater or equal height.")
+    }
+
+    _validateValue(value) {
+        if (value === TronStringEnum.Empty) return;
+        if (value === TronStringEnum.Blue) return;
+        if (value === TronStringEnum.BlueHead) return;
+        if (value === TronStringEnum.Red) return;
+        if (value === TronStringEnum.RedHead) return;
+
+        throw new Error("value must be one of the TronStringEnum values.");
     }
 
     _constructorString(string) {
