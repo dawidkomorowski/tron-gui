@@ -344,4 +344,66 @@ describe("TronString", () => {
             assert.equal(actual, TronStringEnum.RedHead);
         });
     });
+
+    describe("#toString", () => {
+        it("toString() should return '4/4/4/4' when TronString created from constructor('4/4/4/4')", () => {
+            const tronString = new TronString("4/4/4/4");
+            const actual = tronString.toString();
+            assert.equal(actual, "4/4/4/4");
+        });
+
+        it("toString() should return '10/10/10/10/10/10/10/10' when TronString created from constructor('10/10/10/10/10/10/10/10')", () => {
+            const tronString = new TronString("10/10/10/10/10/10/10/10");
+            const actual = tronString.toString();
+            assert.equal(actual, "10/10/10/10/10/10/10/10");
+        });
+
+        it("toString() should return 'bbbb/4/4/4' when TronString created from constructor('bbbb/4/4/4')", () => {
+            const tronString = new TronString("bbbb/4/4/4");
+            const actual = tronString.toString();
+            assert.equal(actual, "bbbb/4/4/4");
+        });
+
+        it("toString() should return 'BBBB/4/4/4' when TronString created from constructor('BBBB/4/4/4')", () => {
+            const tronString = new TronString("BBBB/4/4/4");
+            const actual = tronString.toString();
+            assert.equal(actual, "BBBB/4/4/4");
+        });
+
+        it("toString() should return 'rrrr/4/4/4' when TronString created from constructor('rrrr/4/4/4')", () => {
+            const tronString = new TronString("rrrr/4/4/4");
+            const actual = tronString.toString();
+            assert.equal(actual, "rrrr/4/4/4");
+        });
+
+        it("toString() should return 'RRRR/4/4/4' when TronString created from constructor('RRRR/4/4/4')", () => {
+            const tronString = new TronString("RRRR/4/4/4");
+            const actual = tronString.toString();
+            assert.equal(actual, "RRRR/4/4/4");
+        });
+
+        it("toString() should return 'b3/4/4/4' when TronString created from constructor('b3/4/4/4')", () => {
+            const tronString = new TronString("b3/4/4/4");
+            const actual = tronString.toString();
+            assert.equal(actual, "b3/4/4/4");
+        });
+
+        it("toString() should return '3b/4/4/4' when TronString created from constructor('3b/4/4/4')", () => {
+            const tronString = new TronString("3b/4/4/4");
+            const actual = tronString.toString();
+            assert.equal(actual, "3b/4/4/4");
+        });
+
+        it("toString() should return '1b1r/2B1/1R2/b1r1' when TronString created from constructor('1b1r/2B1/1R2/b1r1')", () => {
+            const tronString = new TronString("1b1r/2B1/1R2/b1r1");
+            const actual = tronString.toString();
+            assert.equal(actual, "1b1r/2B1/1R2/b1r1");
+        });
+
+        it("toString() should return 'bbbb/rR1b/r1Bb/rrrr' when TronString created from constructor('bbbb/rR1b/r1Bb/rrrr')", () => {
+            const tronString = new TronString("bbbb/rR1b/r1Bb/rrrr");
+            const actual = tronString.toString();
+            assert.equal(actual, "bbbb/rR1b/r1Bb/rrrr");
+        });
+    });
 });

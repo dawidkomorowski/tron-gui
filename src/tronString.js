@@ -34,6 +34,54 @@ class TronString {
         this._elements[x][y] = value;
     }
 
+    toString() {
+        let string = "";
+
+        for (let y = 0; y < this.height; y++) {
+            let emptyCount = 0;
+            for (let x = 0; x < this.width; x++) {
+                const element = this._elements[x][y];
+
+                if (element === TronStringEnum.Empty) {
+                    emptyCount++;
+                }
+                else {
+                    if (emptyCount > 0) {
+                        string += emptyCount;
+                        emptyCount = 0;
+                    }
+
+                    switch (element) {
+                        case TronStringEnum.Blue:
+                            string += "b";
+                            break;
+                        case TronStringEnum.BlueHead:
+                            string += "B";
+                            break;
+                        case TronStringEnum.Red:
+                            string += "r";
+                            break;
+                        case TronStringEnum.RedHead:
+                            string += "R";
+                            break;
+                        default:
+                            throw new Error("Implement missing handler of TronStringEnum value: " + element + ".");
+                    }
+                }
+            }
+
+            if (emptyCount > 0) {
+                string += emptyCount;
+            }
+
+            if (y < this.height - 1) {
+                string += "/";
+            }
+        }
+
+        return string;
+    }
+
     _validateCoordinates(x, y) {
         if (x < 0) throw new Error("x cannot be negative.");
         if (y < 0) throw new Error("y cannot be negative.");
