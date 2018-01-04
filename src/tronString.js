@@ -129,6 +129,9 @@ class TronString {
         let i = 0;
         let rowIndex = 0;
 
+        this.__blueHeadParsed = false;
+        this.__redHeadParsed = false;
+
         while (true) {
             const rowResult = this._parseRow(string, i);
 
@@ -183,6 +186,11 @@ class TronString {
             charactersRead += emptyResult.charactersRead;
             i += emptyResult.charactersRead;
         }
+        else {
+            rowElements.push(...notEmptyResult.rowElements);
+            charactersRead += notEmptyResult.charactersRead;
+            i += notEmptyResult.charactersRead;
+        }
 
         while (i < string.length) {
             let notEmptyResult = this._parseNotEmpty(string, i);
@@ -223,6 +231,8 @@ class TronString {
                 charactersRead++;
                 break;
             case "B":
+                if (this.__blueHeadParsed) throw new ParsingError(string, i, "Multiple heads are not allowed.");
+                this.__blueHeadParsed = true;
                 rowElements.push(TronStringEnum.BlueHead);
                 charactersRead++;
                 break;
@@ -231,6 +241,8 @@ class TronString {
                 charactersRead++;
                 break;
             case "R":
+                if (this.__redHeadParsed) throw new ParsingError(string, i, "Multiple heads are not allowed.");
+                this.__redHeadParsed = true;
                 rowElements.push(TronStringEnum.RedHead);
                 charactersRead++;
                 break;

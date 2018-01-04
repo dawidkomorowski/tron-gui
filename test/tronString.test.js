@@ -104,6 +104,18 @@ describe("TronString", () => {
             }, /Expected '\/'/);
         });
 
+        it("constructor('BB2/4/4/4') should throw error", () => {
+            assert.throws(() => {
+                const tronString = new TronString("BB2/4/4/4");
+            }, /Multiple heads are not allowed/);
+        });
+
+        it("constructor('RR2/4/4/4') should throw error", () => {
+            assert.throws(() => {
+                const tronString = new TronString("RR2/4/4/4");
+            }, /Multiple heads are not allowed/);
+        });
+
         it("constructor('4/4/4/4') should create TronString representing empty area 4x4", () => {
             const tronString = new TronString("4/4/4/4");
             assert.equal(tronString.width, 4);
@@ -364,10 +376,10 @@ describe("TronString", () => {
             assert.equal(actual, "bbbb/4/4/4");
         });
 
-        it("toString() should return 'BBBB/4/4/4' when TronString created from constructor('BBBB/4/4/4')", () => {
-            const tronString = new TronString("BBBB/4/4/4");
+        it("toString() should return 'Bbbb/4/4/4' when TronString created from constructor('Bbbb/4/4/4')", () => {
+            const tronString = new TronString("Bbbb/4/4/4");
             const actual = tronString.toString();
-            assert.equal(actual, "BBBB/4/4/4");
+            assert.equal(actual, "Bbbb/4/4/4");
         });
 
         it("toString() should return 'rrrr/4/4/4' when TronString created from constructor('rrrr/4/4/4')", () => {
@@ -376,10 +388,10 @@ describe("TronString", () => {
             assert.equal(actual, "rrrr/4/4/4");
         });
 
-        it("toString() should return 'RRRR/4/4/4' when TronString created from constructor('RRRR/4/4/4')", () => {
-            const tronString = new TronString("RRRR/4/4/4");
+        it("toString() should return 'Rrrr/4/4/4' when TronString created from constructor('Rrrr/4/4/4')", () => {
+            const tronString = new TronString("Rrrr/4/4/4");
             const actual = tronString.toString();
-            assert.equal(actual, "RRRR/4/4/4");
+            assert.equal(actual, "Rrrr/4/4/4");
         });
 
         it("toString() should return 'b3/4/4/4' when TronString created from constructor('b3/4/4/4')", () => {
