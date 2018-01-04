@@ -18,10 +18,17 @@ class TronBoard {
                 this._board[x][y] = tronString.getElementAt(x, y);
             }
         }
+
+        this._isBlueAlive = true;
+        this._isRedAlive = true;
     }
 
     get width() { return this._width; }
     get height() { return this._height; }
+
+    get isBlueAlive() { return this._isBlueAlive; }
+    get isRedAlive() { return this._isRedAlive; }
+    get isGameOver() { return !this.isBlueAlive || !this.isRedAlive; }
 
     getElementAt(x, y) {
         this._validateCoordinates(x, y);
@@ -33,9 +40,25 @@ class TronBoard {
             throw new Error("tronMove must be provided.");
         }
 
+        if (this.isGameOver) {
+            throw new Error("Game is already over.");
+        }
+
         const headsPositions = this._getHeadsPositions();
         const newBluePosition = this._translate(headsPositions.blueHead, tronMove.blueDirection);
         const newRedPosition = this._translate(headsPositions.redHead, tronMove.redDirection);
+
+        if (this.getElementAt(newBluePosition.x, newBluePosition.y) !== TronStringEnum.Empty) {
+            this._isBlueAlive = false;
+        }
+        if (this.getElementAt(newRedPosition.x, newRedPosition.y) !== TronStringEnum.Empty) {
+            this._isRedAlive = false;
+        }
+        if (newBluePosition.x === newRedPosition.x && newBluePosition.y === newRedPosition.y) {
+            this._isBlueAlive = false;
+            this._isRedAlive = false;
+        }
+        if (this.isGameOver) return;
 
         this._setElementAt(headsPositions.blueHead.x, headsPositions.blueHead.y, TronStringEnum.Blue);
         this._setElementAt(headsPositions.redHead.x, headsPositions.redHead.y, TronStringEnum.Red);

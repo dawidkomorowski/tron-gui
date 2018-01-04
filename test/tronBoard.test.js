@@ -73,6 +73,58 @@ describe("TronBoard", () => {
             assert.equal(tronBoard.getElementAt(4, 5), TronStringEnum.Obstacle);
             assert.equal(tronBoard.getElementAt(5, 5), TronStringEnum.Obstacle);
         });
+
+        it("constructor should create board with isBlueAlive = true", () => {
+            const tronString = new TronString("oooooo/obbbbo/orR1bo/or1Bbo/orrrro/oooooo");
+            const tronBoard = new TronBoard(tronString);
+            assert.equal(tronBoard.isBlueAlive, true);
+        });
+
+        it("constructor should create board with isRedAlive = true", () => {
+            const tronString = new TronString("oooooo/obbbbo/orR1bo/or1Bbo/orrrro/oooooo");
+            const tronBoard = new TronBoard(tronString);
+            assert.equal(tronBoard.isRedAlive, true);
+        });
+    });
+
+    describe("#isGameOver", () => {
+        it("isGameOver should be false when isBlueAlive is true and isRedAlive is true", () => {
+            const tronString = new TronString("B9/10/10/10/10/10/10/10/10/9R");
+            const tronBoard = new TronBoard(tronString);
+            assert.equal(tronBoard.isBlueAlive, true);
+            assert.equal(tronBoard.isRedAlive, true);
+            assert.equal(tronBoard.isGameOver, false);
+        });
+
+        it("isGameOver should be true when isBlueAlive is false and isRedAlive is true", () => {
+            const tronString = new TronString("Bo8/10/10/10/10/10/10/10/10/9R");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Left);
+            tronBoard.makeMove(tronMove);
+            assert.equal(tronBoard.isBlueAlive, false);
+            assert.equal(tronBoard.isRedAlive, true);
+            assert.equal(tronBoard.isGameOver, true);
+        });
+
+        it("isGameOver should be true when isBlueAlive is true and isRedAlive is false", () => {
+            const tronString = new TronString("B9/10/10/10/10/10/10/10/10/8oR");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Left);
+            tronBoard.makeMove(tronMove);
+            assert.equal(tronBoard.isBlueAlive, true);
+            assert.equal(tronBoard.isRedAlive, false);
+            assert.equal(tronBoard.isGameOver, true);
+        });
+
+        it("isGameOver should be true when isBlueAlive is false and isRedAlive is false", () => {
+            const tronString = new TronString("Bo8/10/10/10/10/10/10/10/10/8oR");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Left);
+            tronBoard.makeMove(tronMove);
+            assert.equal(tronBoard.isBlueAlive, false);
+            assert.equal(tronBoard.isRedAlive, false);
+            assert.equal(tronBoard.isGameOver, true);
+        });
     });
 
     describe("#getElementAt", () => {
@@ -180,7 +232,11 @@ describe("TronBoard", () => {
             const tronString = new TronString("B9/10/10/10/10/10/10/10/10/9R");
             const tronBoard = new TronBoard(tronString);
             const tronMove = new TronMove(TronMoveDirection.Down, TronMoveDirection.Up);
+
             tronBoard.makeMove(tronMove);
+
+            assert.equal(tronBoard.isBlueAlive, true);
+            assert.equal(tronBoard.isRedAlive, true);
             const tronStringAfterMove = tronBoard.toTronString();
             assert.equal(tronStringAfterMove.toString(), "b9/B9/10/10/10/10/10/10/9R/9r");
         });
@@ -189,9 +245,143 @@ describe("TronBoard", () => {
             const tronString = new TronString("B9/10/10/10/10/10/10/10/10/9R");
             const tronBoard = new TronBoard(tronString);
             const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Left);
+
             tronBoard.makeMove(tronMove);
+
+            assert.equal(tronBoard.isBlueAlive, true);
+            assert.equal(tronBoard.isRedAlive, true);
             const tronStringAfterMove = tronBoard.toTronString();
             assert.equal(tronStringAfterMove.toString(), "bB8/10/10/10/10/10/10/10/10/8Rr");
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Right, TronMoveDirection.Left)) should kill blue when it hits obstacle", () => {
+            const tronString = new TronString("Bo8/10/10/10/10/10/10/10/10/9R");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Left);
+
+            tronBoard.makeMove(tronMove);
+
+            assert.equal(tronBoard.isBlueAlive, false);
+            assert.equal(tronBoard.isRedAlive, true);
+            const tronStringAfterMove = tronBoard.toTronString();
+            assert.equal(tronStringAfterMove.toString(), "Bo8/10/10/10/10/10/10/10/10/9R");
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Right, TronMoveDirection.Left)) should kill blue when it hits blue", () => {
+            const tronString = new TronString("Bb8/10/10/10/10/10/10/10/10/9R");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Left);
+
+            tronBoard.makeMove(tronMove);
+
+            assert.equal(tronBoard.isBlueAlive, false);
+            assert.equal(tronBoard.isRedAlive, true);
+            const tronStringAfterMove = tronBoard.toTronString();
+            assert.equal(tronStringAfterMove.toString(), "Bb8/10/10/10/10/10/10/10/10/9R");
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Right, TronMoveDirection.Left)) should kill blue when it hits red", () => {
+            const tronString = new TronString("Br8/10/10/10/10/10/10/10/10/9R");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Left);
+
+            tronBoard.makeMove(tronMove);
+
+            assert.equal(tronBoard.isBlueAlive, false);
+            assert.equal(tronBoard.isRedAlive, true);
+            const tronStringAfterMove = tronBoard.toTronString();
+            assert.equal(tronStringAfterMove.toString(), "Br8/10/10/10/10/10/10/10/10/9R");
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Right, TronMoveDirection.Right)) should kill blue when it hits red head", () => {
+            const tronString = new TronString("BR8/10/10/10/10/10/10/10/10/10");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Right);
+
+            tronBoard.makeMove(tronMove);
+
+            assert.equal(tronBoard.isBlueAlive, false);
+            assert.equal(tronBoard.isRedAlive, true);
+            const tronStringAfterMove = tronBoard.toTronString();
+            assert.equal(tronStringAfterMove.toString(), "BR8/10/10/10/10/10/10/10/10/10");
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Left, TronMoveDirection.Right)) should kill red when it hits obstacle", () => {
+            const tronString = new TronString("Ro8/10/10/10/10/10/10/10/10/9B");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Left, TronMoveDirection.Right);
+
+            tronBoard.makeMove(tronMove);
+
+            assert.equal(tronBoard.isBlueAlive, true);
+            assert.equal(tronBoard.isRedAlive, false);
+            const tronStringAfterMove = tronBoard.toTronString();
+            assert.equal(tronStringAfterMove.toString(), "Ro8/10/10/10/10/10/10/10/10/9B");
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Left, TronMoveDirection.Right)) should kill red when it hits red", () => {
+            const tronString = new TronString("Rr8/10/10/10/10/10/10/10/10/9B");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Left, TronMoveDirection.Right);
+
+            tronBoard.makeMove(tronMove);
+
+            assert.equal(tronBoard.isBlueAlive, true);
+            assert.equal(tronBoard.isRedAlive, false);
+            const tronStringAfterMove = tronBoard.toTronString();
+            assert.equal(tronStringAfterMove.toString(), "Rr8/10/10/10/10/10/10/10/10/9B");
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Left, TronMoveDirection.Right)) should kill red when it hits blue", () => {
+            const tronString = new TronString("Rb8/10/10/10/10/10/10/10/10/9B");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Left, TronMoveDirection.Right);
+
+            tronBoard.makeMove(tronMove);
+
+            assert.equal(tronBoard.isBlueAlive, true);
+            assert.equal(tronBoard.isRedAlive, false);
+            const tronStringAfterMove = tronBoard.toTronString();
+            assert.equal(tronStringAfterMove.toString(), "Rb8/10/10/10/10/10/10/10/10/9B");
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Right, TronMoveDirection.Right)) should kill red when it hits blue head", () => {
+            const tronString = new TronString("RB8/10/10/10/10/10/10/10/10/10");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Right);
+
+            tronBoard.makeMove(tronMove);
+
+            assert.equal(tronBoard.isBlueAlive, true);
+            assert.equal(tronBoard.isRedAlive, false);
+            const tronStringAfterMove = tronBoard.toTronString();
+            assert.equal(tronStringAfterMove.toString(), "RB8/10/10/10/10/10/10/10/10/10");
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Right, TronMoveDirection.Left)) should kill blue and red when both enter the same field", () => {
+            const tronString = new TronString("B1R7/10/10/10/10/10/10/10/10/10");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Left);
+
+            tronBoard.makeMove(tronMove);
+
+            assert.equal(tronBoard.isBlueAlive, false);
+            assert.equal(tronBoard.isRedAlive, false);
+            const tronStringAfterMove = tronBoard.toTronString();
+            assert.equal(tronStringAfterMove.toString(), "B1R7/10/10/10/10/10/10/10/10/10");
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Right, TronMoveDirection.Left)) should kill blue and red when both enter obstacle", () => {
+            const tronString = new TronString("Bo8/10/10/10/10/10/10/10/10/8oR");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Left);
+
+            tronBoard.makeMove(tronMove);
+
+            assert.equal(tronBoard.isBlueAlive, false);
+            assert.equal(tronBoard.isRedAlive, false);
+            const tronStringAfterMove = tronBoard.toTronString();
+            assert.equal(tronStringAfterMove.toString(), "Bo8/10/10/10/10/10/10/10/10/8oR");
         });
     });
 
