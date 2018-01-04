@@ -25,31 +25,53 @@ describe("TronBoard", () => {
             }, /tronString must be provided/);
         });
 
-        it("constructor(new TronString('bbbb/rR1b/r1Bb/rrrr')) should create board 4x4 with some blue, blue head, red, red head and empty tiles", () => {
-            const tronString = new TronString("bbbb/rR1b/r1Bb/rrrr");
+        it("constructor(new TronString('oooooo/obbbbo/orR1bo/or1Bbo/orrrro/oooooo')) should create board 4x4 with some blue, blue head, red, red head, empty tiles and surrounded with obstacles", () => {
+            const tronString = new TronString("oooooo/obbbbo/orR1bo/or1Bbo/orrrro/oooooo");
             const tronBoard = new TronBoard(tronString);
-            assert.equal(tronBoard.width, 4);
-            assert.equal(tronBoard.height, 4);
+            assert.equal(tronBoard.width, 6);
+            assert.equal(tronBoard.height, 6);
 
-            assert.equal(tronBoard.getElementAt(0, 0), TronStringEnum.Blue);
-            assert.equal(tronBoard.getElementAt(1, 0), TronStringEnum.Blue);
-            assert.equal(tronBoard.getElementAt(2, 0), TronStringEnum.Blue);
-            assert.equal(tronBoard.getElementAt(3, 0), TronStringEnum.Blue);
+            assert.equal(tronBoard.getElementAt(0, 0), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(1, 0), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(2, 0), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(3, 0), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(4, 0), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(5, 0), TronStringEnum.Obstacle);
 
-            assert.equal(tronBoard.getElementAt(0, 1), TronStringEnum.Red);
-            assert.equal(tronBoard.getElementAt(1, 1), TronStringEnum.RedHead);
-            assert.equal(tronBoard.getElementAt(2, 1), TronStringEnum.Empty);
+            assert.equal(tronBoard.getElementAt(0, 1), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(1, 1), TronStringEnum.Blue);
+            assert.equal(tronBoard.getElementAt(2, 1), TronStringEnum.Blue);
             assert.equal(tronBoard.getElementAt(3, 1), TronStringEnum.Blue);
+            assert.equal(tronBoard.getElementAt(4, 1), TronStringEnum.Blue);
+            assert.equal(tronBoard.getElementAt(5, 1), TronStringEnum.Obstacle);
 
-            assert.equal(tronBoard.getElementAt(0, 2), TronStringEnum.Red);
-            assert.equal(tronBoard.getElementAt(1, 2), TronStringEnum.Empty);
-            assert.equal(tronBoard.getElementAt(2, 2), TronStringEnum.BlueHead);
-            assert.equal(tronBoard.getElementAt(3, 2), TronStringEnum.Blue);
+            assert.equal(tronBoard.getElementAt(0, 2), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(1, 2), TronStringEnum.Red);
+            assert.equal(tronBoard.getElementAt(2, 2), TronStringEnum.RedHead);
+            assert.equal(tronBoard.getElementAt(3, 2), TronStringEnum.Empty);
+            assert.equal(tronBoard.getElementAt(4, 2), TronStringEnum.Blue);
+            assert.equal(tronBoard.getElementAt(5, 2), TronStringEnum.Obstacle);
 
-            assert.equal(tronBoard.getElementAt(0, 3), TronStringEnum.Red);
+            assert.equal(tronBoard.getElementAt(0, 3), TronStringEnum.Obstacle);
             assert.equal(tronBoard.getElementAt(1, 3), TronStringEnum.Red);
-            assert.equal(tronBoard.getElementAt(2, 3), TronStringEnum.Red);
-            assert.equal(tronBoard.getElementAt(3, 3), TronStringEnum.Red);
+            assert.equal(tronBoard.getElementAt(2, 3), TronStringEnum.Empty);
+            assert.equal(tronBoard.getElementAt(3, 3), TronStringEnum.BlueHead);
+            assert.equal(tronBoard.getElementAt(4, 3), TronStringEnum.Blue);
+            assert.equal(tronBoard.getElementAt(5, 3), TronStringEnum.Obstacle);
+
+            assert.equal(tronBoard.getElementAt(0, 4), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(1, 4), TronStringEnum.Red);
+            assert.equal(tronBoard.getElementAt(2, 4), TronStringEnum.Red);
+            assert.equal(tronBoard.getElementAt(3, 4), TronStringEnum.Red);
+            assert.equal(tronBoard.getElementAt(4, 4), TronStringEnum.Red);
+            assert.equal(tronBoard.getElementAt(5, 4), TronStringEnum.Obstacle);
+
+            assert.equal(tronBoard.getElementAt(0, 5), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(1, 5), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(2, 5), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(3, 5), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(4, 5), TronStringEnum.Obstacle);
+            assert.equal(tronBoard.getElementAt(5, 5), TronStringEnum.Obstacle);
         });
     });
 
@@ -181,11 +203,11 @@ describe("TronBoard", () => {
             assert.equal(actual.toString(), "1b1r/2B1/1R2/b1r1");
         });
 
-        it("toTronString() should return TronString 'bbbb/rR1b/r1Bb/rrrr' when TronBoard created from such a TronString", () => {
-            const tronString = new TronString("bbbb/rR1b/r1Bb/rrrr");
+        it("toTronString() should return TronString 'oooooo/obbbbo/orR1bo/or1Bbo/orrrro/oooooo' when TronBoard created from such a TronString", () => {
+            const tronString = new TronString("oooooo/obbbbo/orR1bo/or1Bbo/orrrro/oooooo");
             const tronBoard = new TronBoard(tronString);
             const actual = tronBoard.toTronString();
-            assert.equal(actual.toString(), "bbbb/rR1b/r1Bb/rrrr");
+            assert.equal(actual.toString(), "oooooo/obbbbo/orR1bo/or1Bbo/orrrro/oooooo");
         });
     });
 });

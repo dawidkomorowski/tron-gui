@@ -52,6 +52,9 @@ class TronString {
                     }
 
                     switch (element) {
+                        case TronStringEnum.Obstacle:
+                            string += "o";
+                            break;
                         case TronStringEnum.Blue:
                             string += "b";
                             break;
@@ -91,6 +94,7 @@ class TronString {
 
     _validateValue(value) {
         if (value === TronStringEnum.Empty) return;
+        if (value === TronStringEnum.Obstacle) return;
         if (value === TronStringEnum.Blue) return;
         if (value === TronStringEnum.BlueHead) return;
         if (value === TronStringEnum.Red) return;
@@ -226,6 +230,10 @@ class TronString {
         let charactersRead = 0;
 
         switch (string[i]) {
+            case "o":
+                rowElements.push(TronStringEnum.Obstacle);
+                charactersRead++;
+                break;
             case "b":
                 rowElements.push(TronStringEnum.Blue);
                 charactersRead++;
@@ -302,6 +310,7 @@ class ParsingError extends Error {
 
 const TronStringEnum = {
     Empty: "Empty",
+    Obstacle: "Obstacle",
     Blue: "Blue",
     BlueHead: "BlueHead",
     Red: "Red",
