@@ -24,6 +24,7 @@ class TronBoard {
     get height() { return this._height; }
 
     getElementAt(x, y) {
+        this._validateCoordinates(x, y);
         return this._board[x][y];
     }
 
@@ -36,11 +37,11 @@ class TronBoard {
         const newBluePosition = this._translate(headsPositions.blueHead, tronMove.blueDirection);
         const newRedPosition = this._translate(headsPositions.redHead, tronMove.redDirection);
 
-        this._board[headsPositions.blueHead.x][headsPositions.blueHead.y] = TronStringEnum.Blue;
-        this._board[headsPositions.redHead.x][headsPositions.redHead.y] = TronStringEnum.Red;
+        this._setElementAt(headsPositions.blueHead.x, headsPositions.blueHead.y, TronStringEnum.Blue);
+        this._setElementAt(headsPositions.redHead.x, headsPositions.redHead.y, TronStringEnum.Red);
 
-        this._board[newBluePosition.x][newBluePosition.y] = TronStringEnum.BlueHead;
-        this._board[newRedPosition.x][newRedPosition.y] = TronStringEnum.RedHead;
+        this._setElementAt(newBluePosition.x, newBluePosition.y, TronStringEnum.BlueHead);
+        this._setElementAt(newRedPosition.x, newRedPosition.y, TronStringEnum.RedHead);
     }
 
     toTronString() {
@@ -52,6 +53,18 @@ class TronBoard {
         }
 
         return tronString;
+    }
+
+    _setElementAt(x, y, value) {
+        this._validateCoordinates(x, y);
+        this._board[x][y] = value;
+    }
+
+    _validateCoordinates(x, y) {
+        if (x < 0) throw new Error("x cannot be negative.");
+        if (y < 0) throw new Error("y cannot be negative.");
+        if (x >= this.width) throw new Error("x cannot be greater or equal width.")
+        if (y >= this.height) throw new Error("y cannot be greater or equal height.")
     }
 
     _getHeadsPositions() {

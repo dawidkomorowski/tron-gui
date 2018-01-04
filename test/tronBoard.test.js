@@ -53,6 +53,54 @@ describe("TronBoard", () => {
         });
     });
 
+    describe("#getElementAt", () => {
+        it("getElementAt(-1, 0) should throw error when TronBoard area is 4x6", () => {
+            assert.throws(() => {
+                const tronString = new TronString(4, 6);
+                const tronBoard = new TronBoard(tronString);
+                tronBoard.getElementAt(-1, 0);
+            }, /x cannot be negative/);
+        });
+
+        it("getElementAt(0, -1) should throw error when TronBoard area is 4x6", () => {
+            assert.throws(() => {
+                const tronString = new TronString(4, 6);
+                const tronBoard = new TronBoard(tronString);
+                tronBoard.getElementAt(0, -1);
+            }, /y cannot be negative/);
+        });
+
+        it("getElementAt(4, 0) should throw error when TronBoard area is 4x6", () => {
+            assert.throws(() => {
+                const tronString = new TronString(4, 6);
+                const tronBoard = new TronBoard(tronString);
+                tronBoard.getElementAt(4, 0);
+            }, /x cannot be greater or equal width/);
+        });
+
+        it("getElementAt(0, 6) should throw error when TronBoard area is 4x6", () => {
+            assert.throws(() => {
+                const tronString = new TronString(4, 6);
+                const tronBoard = new TronBoard(tronString);
+                tronBoard.getElementAt(0, 6);
+            }, /y cannot be greater or equal height/);
+        });
+
+        it("getElementAt(0, 0) should return TronStringEnum.Empty when TronBoard area is 4x6", () => {
+            const tronString = new TronString(4, 6);
+            const tronBoard = new TronBoard(tronString);
+            const actual = tronBoard.getElementAt(0, 0);
+            assert.equal(actual, TronStringEnum.Empty);
+        });
+
+        it("getElementAt(3, 5) should return TronStringEnum.Empty when TronBoard area is 4x6", () => {
+            const tronString = new TronString(4, 6);
+            const tronBoard = new TronBoard(tronString);
+            const actual = tronBoard.getElementAt(3, 5);
+            assert.equal(actual, TronStringEnum.Empty);
+        });
+    });
+
     describe("#makeMove", () => {
         it("makeMove() should throw error", () => {
             assert.throws(() => {
@@ -68,6 +116,42 @@ describe("TronBoard", () => {
                 const tronBoard = new TronBoard(tronString);
                 tronBoard.makeMove({});
             }, /tronMove must be provided/);
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Up, TronMoveDirection.Up)) should throw error when move is beyond the board at the top", () => {
+            assert.throws(() => {
+                const tronString = new TronString("B9/10/10/10/10/10/10/10/10/9R");
+                const tronBoard = new TronBoard(tronString);
+                const tronMove = new TronMove(TronMoveDirection.Up, TronMoveDirection.Up);
+                tronBoard.makeMove(tronMove);
+            }, /y cannot be negative/);
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Down, TronMoveDirection.Down)) should throw error when move is beyond the board at the bottom", () => {
+            assert.throws(() => {
+                const tronString = new TronString("B9/10/10/10/10/10/10/10/10/9R");
+                const tronBoard = new TronBoard(tronString);
+                const tronMove = new TronMove(TronMoveDirection.Down, TronMoveDirection.Down);
+                tronBoard.makeMove(tronMove);
+            }, /y cannot be greater or equal height/);
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Left, TronMoveDirection.Left)) should throw error when move is beyond the board on the left", () => {
+            assert.throws(() => {
+                const tronString = new TronString("B9/10/10/10/10/10/10/10/10/9R");
+                const tronBoard = new TronBoard(tronString);
+                const tronMove = new TronMove(TronMoveDirection.Left, TronMoveDirection.Left);
+                tronBoard.makeMove(tronMove);
+            }, /x cannot be negative/);
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Right, TronMoveDirection.Right)) should throw error when move is beyond the board on the right", () => {
+            assert.throws(() => {
+                const tronString = new TronString("B9/10/10/10/10/10/10/10/10/9R");
+                const tronBoard = new TronBoard(tronString);
+                const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Right);
+                tronBoard.makeMove(tronMove);
+            }, /x cannot be greater or equal width/);
         });
 
         it("makeMove(new TronMove(TronMoveDirection.Down, TronMoveDirection.Up)) should move accordingly", () => {
