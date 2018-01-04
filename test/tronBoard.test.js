@@ -1,5 +1,7 @@
 const assert = require("assert");
 const TronBoard = require("../src/tronBoard").TronBoard;
+const TronMove = require("../src/tronBoard").TronMove;
+const TronMoveDirection = require("../src/tronBoard").TronMoveDirection;
 const TronString = require("../src/tronString").TronString;
 const TronStringEnum = require("../src/tronString").TronStringEnum;
 
@@ -51,6 +53,42 @@ describe("TronBoard", () => {
         });
     });
 
+    describe("#makeMove", () => {
+        it("makeMove() should throw error", () => {
+            assert.throws(() => {
+                const tronString = new TronString("B9/10/10/10/10/10/10/10/10/9R");
+                const tronBoard = new TronBoard(tronString);
+                tronBoard.makeMove();
+            }, /tronMove must be provided/);
+        });
+
+        it("makeMove({}) should throw error", () => {
+            assert.throws(() => {
+                const tronString = new TronString("B9/10/10/10/10/10/10/10/10/9R");
+                const tronBoard = new TronBoard(tronString);
+                tronBoard.makeMove({});
+            }, /tronMove must be provided/);
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Down, TronMoveDirection.Up)) should move accordingly", () => {
+            const tronString = new TronString("B9/10/10/10/10/10/10/10/10/9R");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Down, TronMoveDirection.Up);
+            tronBoard.makeMove(tronMove);
+            const tronStringAfterMove = tronBoard.toTronString();
+            assert.equal(tronStringAfterMove.toString(), "b9/B9/10/10/10/10/10/10/9R/9r");
+        });
+
+        it("makeMove(new TronMove(TronMoveDirection.Right, TronMoveDirection.Left)) should move accordingly", () => {
+            const tronString = new TronString("B9/10/10/10/10/10/10/10/10/9R");
+            const tronBoard = new TronBoard(tronString);
+            const tronMove = new TronMove(TronMoveDirection.Right, TronMoveDirection.Left);
+            tronBoard.makeMove(tronMove);
+            const tronStringAfterMove = tronBoard.toTronString();
+            assert.equal(tronStringAfterMove.toString(), "bB8/10/10/10/10/10/10/10/10/8Rr");
+        });
+    });
+
     describe("#toTronString", () => {
         it("toTronString() should return TronString '1b1r/2B1/1R2/b1r1' when TronBoard created from such a TronString", () => {
             const tronString = new TronString("1b1r/2B1/1R2/b1r1");
@@ -64,6 +102,46 @@ describe("TronBoard", () => {
             const tronBoard = new TronBoard(tronString);
             const actual = tronBoard.toTronString();
             assert.equal(actual.toString(), "bbbb/rR1b/r1Bb/rrrr");
+        });
+    });
+});
+
+describe("TronMove", () => {
+    describe("#constructor", () => {
+        it("constructor() should throw error", () => {
+            assert.throws(() => {
+                const tronMove = new TronMove();
+            }, /direction must be one of the TronMoveDirection values/);
+        });
+
+        it("constructor('Not existing value', TronMoveDirection.Up) should throw error", () => {
+            assert.throws(() => {
+                const tronMove = new TronMove("Not existing value", TronMoveDirection.Up);
+            }, /direction must be one of the TronMoveDirection values/);
+        });
+
+        it("constructor(TronMoveDirection.Up, 'Not existing value') should throw error", () => {
+            assert.throws(() => {
+                const tronMove = new TronMove(TronMoveDirection.Up, "Not existing value");
+            }, /direction must be one of the TronMoveDirection values/);
+        });
+
+        it("constructor('Not existing value', 'Not existing value') should throw error", () => {
+            assert.throws(() => {
+                const tronMove = new TronMove("Not existing value", "Not existing value");
+            }, /direction must be one of the TronMoveDirection values/);
+        });
+
+        it("constructor(TronMoveDirection.Up, TronMoveDirection.Down) should set blueDirection as TronMoveDirection.Up and redDirection as TronMoveDirection.Down", () => {
+            const tronMove = new TronMove(TronMoveDirection.Up, TronMoveDirection.Down);
+            assert.equal(tronMove.blueDirection, TronMoveDirection.Up);
+            assert.equal(tronMove.redDirection, TronMoveDirection.Down);
+        });
+
+        it("constructor(TronMoveDirection.Left, TronMoveDirection.Right) should set blueDirection as TronMoveDirection.Left and redDirection as TronMoveDirection.Right", () => {
+            const tronMove = new TronMove(TronMoveDirection.Left, TronMoveDirection.Right);
+            assert.equal(tronMove.blueDirection, TronMoveDirection.Left);
+            assert.equal(tronMove.redDirection, TronMoveDirection.Right);
         });
     });
 });
