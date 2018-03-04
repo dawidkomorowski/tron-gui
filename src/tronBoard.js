@@ -3,7 +3,7 @@ const TronStringEnum = require("./tronString").TronStringEnum;
 
 class TronBoard {
     constructor(tronString) {
-        if (!tronString || typeof tronString !== "object" || tronString.constructor !== TronString) {
+        if (!(tronString instanceof TronString)) {
             throw new Error("tronString must be provided.");
         }
 
@@ -36,7 +36,7 @@ class TronBoard {
     }
 
     makeMove(tronMove) {
-        if (!tronMove || typeof tronMove !== "object" || tronMove.constructor !== TronMove) {
+        if (!(tronMove instanceof TronMove)) {
             throw new Error("tronMove must be provided.");
         }
 
