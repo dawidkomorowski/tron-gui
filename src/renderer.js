@@ -6,18 +6,17 @@ const TronString = require("./tronString").TronString;
 const TronBoard = require("./tronBoard").TronBoard;
 const TronBoardRenderer = require("./tronBoardRenderer").TronBoardRenderer;
 const Process = require("./process").Process;
+const TronBot = require("./tronBot").TronBot;
 
 let tronString = new TronString("oooooooooooo/oB9o/o10o/o10o/o10o/o10o/o10o/o10o/o10o/o10o/o9Ro/oooooooooooo");
 let tronBoard = new TronBoard(tronString);
-let tronBoardRenderer = new TronBoardRenderer("tronBoardCanvas");
+let tronBoardRenderer = new TronBoardRenderer("tron-board-canvas");
 
 // TODO maybe pass once by constructor?
 tronBoardRenderer.tronBoard = tronBoard;
 tronBoardRenderer.render();
 
-let process = new Process("C:\\Users\\Dawid Komorowski\\source\\repos\\TbiTester\\TbiTester\\bin\\Debug\\TbiTester.exe");
-process.sendMessage("tbi", (data) => {
-    console.log("response: " + data);
-    process.sendMessage("Exit");
-    //process.close();
+let tronBot = new TronBot("C:\\Users\\Dawid Komorowski\\source\\repos\\TbiTester\\TbiTester\\bin\\Debug\\TbiTester.exe", m => console.log(m));
+tronBot.start().then(() => {
+    tronBot.stop();
 });

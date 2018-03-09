@@ -1,0 +1,26 @@
+.main-panels-container {
+    display: grid;
+    grid-template-columns: min-content auto;
+}
+
+.left-panel {
+    margin-right: 10px;
+}
+
+.tron-board {
+    border: 1px solid;
+}
+
+.runtime-information {
+    margin-bottom: 20px;
+}
+
+.tron-bot-path-container {
+    display: grid;
+    grid-template-columns: 100px auto;
+}
+
+.tron-bot-path {
+    width: 100%;
+    margin-bottom: 5px;
+}

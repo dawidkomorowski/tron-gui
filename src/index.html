@@ -4,19 +4,40 @@
 <head>
   <meta charset="UTF-8">
   <title>Tron Gui</title>
+
+  <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 
 <body>
   <h1>Tron Gui</h1>
-  <div>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    Electron <script>document.write(process.versions.electron)</script>
-  </div>
-  <canvas id="tronBoardCanvas" width="500" height="500" style="border: 1px solid"></canvas>
+  <div class="main-panels-container">
+    <div id="left-panel" class="left-panel">
+      <div id="tron-board">
+        <canvas id="tron-board-canvas" width="500" height="500" class="tron-board"></canvas>
+      </div>
+    </div>
+    <div id="right-panel">
+      <div id="runtime-information" class="runtime-information">
+        <!-- All of the Node.js APIs are available in this renderer process. -->
+        Node.js
+        <script>document.write(process.versions.node)</script>, Chromium
+        <script>document.write(process.versions.chrome)</script>, Electron
+        <script>document.write(process.versions.electron)</script>
+      </div>
 
-  <button>Make move</button>
+      <div id="control-panel">
+        <div class="tron-bot-path-container">
+          <label for="red-bot-path">Red bot path:</label>
+          <input type="text" id="red-bot-path" class="tron-bot-path" />
+
+          <label for="blue-bot-path">Blue bot path: </label>
+          <input type="text" id="blue-bot-path" class="tron-bot-path" />
+        </div>
+
+        <button>Run</button>
+      </div>
+    </div>
+  </div>
 
   <script>
     // You can also require other files to run in this process
