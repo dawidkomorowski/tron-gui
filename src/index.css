@@ -24,3 +24,15 @@
     width: 100%;
     margin-bottom: 5px;
 }
+
+.tron-bot-log-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    margin-top: 10px;
+}
+
+.tron-bot-log {
+    resize: none;
+    margin-right: 5px;
+    height: 200px;
+}

@@ -16,7 +16,12 @@ let tronBoardRenderer = new TronBoardRenderer("tron-board-canvas");
 tronBoardRenderer.tronBoard = tronBoard;
 tronBoardRenderer.render();
 
-let tronBot = new TronBot("C:\\Users\\Dawid Komorowski\\source\\repos\\TbiTester\\TbiTester\\bin\\Debug\\TbiTester.exe", m => console.log(m));
+let redBotLogTextArea = document.getElementById("red-bot-log");
+let tronBot = new TronBot("C:\\Users\\Dawid Komorowski\\source\\repos\\TbiTester\\TbiTester\\bin\\Debug\\TbiTester.exe", m => {
+    redBotLogTextArea.textContent = redBotLogTextArea.textContent + m + "\n";
+    redBotLogTextArea.scrollTop = redBotLogTextArea.scrollHeight;
+});
+
 tronBot.start().then(() => {
     tronBot.stop();
 });
