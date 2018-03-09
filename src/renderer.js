@@ -7,6 +7,7 @@ const TronBoard = require("./tronBoard").TronBoard;
 const TronBoardRenderer = require("./tronBoardRenderer").TronBoardRenderer;
 const Process = require("./process").Process;
 const TronBot = require("./tronBot").TronBot;
+const Log = require("./log").Log;
 
 let tronString = new TronString("oooooooooooo/oB9o/o10o/o10o/o10o/o10o/o10o/o10o/o10o/o10o/o9Ro/oooooooooooo");
 let tronBoard = new TronBoard(tronString);
@@ -17,11 +18,16 @@ tronBoardRenderer.tronBoard = tronBoard;
 tronBoardRenderer.render();
 
 let redBotLogTextArea = document.getElementById("red-bot-log");
-let tronBot = new TronBot("C:\\Users\\Dawid Komorowski\\source\\repos\\TbiTester\\TbiTester\\bin\\Debug\\TbiTester.exe", m => {
-    redBotLogTextArea.textContent = redBotLogTextArea.textContent + m + "\n";
+let redBotLog = new Log(m => {
+    redBotLogTextArea.textContent = redBotLogTextArea.textContent + m;
     redBotLogTextArea.scrollTop = redBotLogTextArea.scrollHeight;
-});
+})
+
+let tronBot = new TronBot("C:\\Users\\Dawid Komorowski\\source\\repos\\TbiTester\\TbiTester\\bin\\Debug\\TbiTester.exe", redBotLog);
 
 tronBot.start().then(() => {
-    tronBot.stop();
+    tronBot.makeMove(tronString).then(data => {
+        console.log(data);
+        tronBot.stop();
+    })
 });
