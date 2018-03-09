@@ -15,7 +15,8 @@ class TronBot {
             this._info("Negotiating tron bot interface.")
             this._process.sendMessage("tbi").then(data => {
                 if (data === "tbi ok") {
-                    this._info("Tron bot interface accepted. Negotiating interface version.")
+                    this._info("Tron bot interface accepted.")
+                    this._info("Negotiating interface version.")
                     this._process.sendMessage("tbi v1").then(data => {
                         if (data === "tbi v1 ok") {
                             this._info("Tron bot interface version 1 accepted.");
