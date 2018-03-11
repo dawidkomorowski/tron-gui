@@ -41,14 +41,12 @@ class HostManager {
         Promise.all([this._blueBot.start(), this._redBot.start()]).then(() => {
             this._makeMove();
         }, () => {
-            this._controlPanel.runButtonDisabled = false;
-            this._isRunning = false;
+            this._stop();
         });
     }
 
     _initialSetup() {
-        //const tronString = new TronString("oooooooooooo/oB9o/o10o/o10o/o10o/o10o/o10o/o10o/o10o/o10o/o9Ro/oooooooooooo");
-        const tronString = new TronString("oooooooooooo/o10o/o10o/o10o/o4B5o/o10o/o10o/o5R4o/o10o/o10o/o10o/oooooooooooo");
+        const tronString = new TronString("oooooooooooo/oB9o/o10o/o10o/o10o/o10o/o10o/o10o/o10o/o10o/o9Ro/oooooooooooo");
         this._tronBoard = new TronBoard(tronString);
         this._tronBoardRenderer.tronBoard = this._tronBoard;
         this._tronBoardRenderer.render();
@@ -68,16 +66,21 @@ class HostManager {
                     this._controlPanel.redBotLog.info("Red bot crashed!");
                 }
 
-                this._controlPanel.runButtonDisabled = false;
-                this._isRunning = false;
+                this._stop();
             }
             else {
                 this._makeMove();
             }
         }, () => {
-            this._controlPanel.runButtonDisabled = false;
-            this._isRunning = false;
+            this._stop();
         });
+    }
+
+    _stop() {
+        this._controlPanel.runButtonDisabled = false;
+        this._isRunning = false;
+        this._blueBot.stop();
+        this._redBot.stop();
     }
 }
 
