@@ -88,10 +88,15 @@ There is no response from bot expected. Bot should just shut down its process.
 Tron bot uses tron string notation to pass state of tron board to tron bot process. The following signage is used:
 
 o - obstacle
+
 b - blue tail
+
 B - blue head
+
 r - red tail
+
 R - red head
+
 number - number of subsequent empty fields
 
 In example tron string:
