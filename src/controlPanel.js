@@ -28,6 +28,7 @@ class ControlPanel {
     get blueBotPath() { return this._blueBotPathInput.value; }
     get redBotPath() { return this._redBotPathInput.value; }
     set runButtonHandler(handler) { this._runButtonHandler = handler; }
+    set runButtonDisabled(disabled) { this._runButton.disabled = disabled; }
     get blueBotLog() { return this._blueBotLog; }
     get redBotLog() { return this._redBotLog; }
 }
