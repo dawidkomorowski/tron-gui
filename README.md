@@ -1,7 +1,7 @@
 # Introduction
 Tron GUI is a graphical host for tron bot competition. A bot itself is a separate process and host uses text interface to communicate with the bot process through standard I/O.
 
-#Tron bot interface version 1
+# Tron bot interface version 1
 Host starts with interface discovery process. First comand send to bot is:
 ```
 tbi
