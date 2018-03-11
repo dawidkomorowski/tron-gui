@@ -18,7 +18,7 @@ describe("Log", () => {
 
         it("constructor(() => {}) should create Log instance", () => {
             const log = new Log(() => { });
-            assert.notEqual(log, null);
+            assert.equal(typeof log, "object");
         });
     });
 

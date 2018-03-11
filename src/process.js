@@ -34,5 +34,8 @@ class Process {
 }
 
 module.exports = {
-    Process: Process
+    Process: Process,
+    createProcess(path) {
+        return new Process(path);
+    }
 }
