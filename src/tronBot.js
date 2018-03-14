@@ -81,7 +81,7 @@ class TronBot {
             throw new Error("Tron bot cannot make move when process is not running.")
         }
 
-        this._log.info("Make move requested.");
+        this._log.info("Make move requested for tron string: " + tronString.toString());
         return this._process.sendMessage("move " + tronString.toString()).then(data => {
             this._log.info("Received move: " + data);
             switch (data) {
