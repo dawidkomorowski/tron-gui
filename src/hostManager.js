@@ -35,10 +35,32 @@ class HostManager {
         this._controlPanel.runButtonDisabled = true;
         this._isRunning = true;
 
-        this._blueBot = new TronBot(TronBotColor.Blue, this._controlPanel.blueBotPath, this._controlPanel.blueBotLog);
-        this._redBot = new TronBot(TronBotColor.Red, this._controlPanel.redBotPath, this._controlPanel.redBotLog);
+        if (this._errorScope(TronBotColor.Blue, () => {
+            this._blueBot = new TronBot(TronBotColor.Blue, this._controlPanel.blueBotPath, this._controlPanel.blueBotLog);
+        })) {
+            return;
+        }
+        if (this._errorScope(TronBotColor.Red, () => {
+            this._redBot = new TronBot(TronBotColor.Red, this._controlPanel.redBotPath, this._controlPanel.redBotLog);
+        })) {
+            return;
+        }
 
-        Promise.all([this._blueBot.start(), this._redBot.start()]).then(() => {
+        let blueBotPromise;
+        let redBotPromise;
+
+        if (this._errorScope(TronBotColor.Blue, () => {
+            blueBotPromise = this._blueBot.start();
+        })) {
+            return;
+        }
+        if (this._errorScope(TronBotColor.Red, () => {
+            redBotPromise = this._redBot.start();
+        })) {
+            return;
+        }
+
+        Promise.all([blueBotPromise, redBotPromise]).then(() => {
             this._makeMove();
         }, () => {
             this._stop();
@@ -81,6 +103,38 @@ class HostManager {
         this._isRunning = false;
         this._blueBot.stop();
         this._redBot.stop();
+    }
+
+    _errorScope(color, action) {
+        try {
+            action();
+        } catch (error) {
+            let log;
+            switch (color) {
+                case TronBotColor.Blue:
+                    log = this._controlPanel.blueBotLog;
+                    break;
+                case TronBotColor.Red:
+                    log = this._controlPanel.redBotLog;
+                    break;
+                default:
+                    throw new Error("color must be either Blue or Red.");
+            }
+            log.error(error);
+            this._controlPanel.runButtonDisabled = false;
+            this._isRunning = false;
+
+            try {
+                this._stop();
+            }
+            catch (error) {
+                log.error(error);
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }
 

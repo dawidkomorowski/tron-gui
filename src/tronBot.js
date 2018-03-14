@@ -33,9 +33,11 @@ class TronBot {
         this._log.info("Starting tron bot process...")
         this._process = createProcess(this._path);
 
+        this._log.info("Negotiating tron bot interface.")
+        const initialPromise = this._process.sendMessage("tbi");
+
         return new Promise((resolve, reject) => {
-            this._log.info("Negotiating tron bot interface.")
-            this._process.sendMessage("tbi").then(data => {
+            initialPromise.then(data => {
                 if (data === "tbi ok") {
                     this._log.info("Tron bot interface accepted.")
                     this._log.info("Negotiating interface version.")

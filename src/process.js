@@ -10,14 +10,16 @@ class Process {
     }
 
     sendMessage(message) {
-        this._internalProcess.stdin.write(message + "\n");
-
-        return new Promise((resolve, reject) => {
+        const promise = new Promise((resolve, reject) => {
             this._responseHandler = data => {
                 resolve(data);
                 this._responseHandler = null;
             };
         });
+
+        this._internalProcess.stdin.write(message + "\n");
+
+        return promise;
     }
 
     close() {
