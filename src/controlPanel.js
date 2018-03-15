@@ -15,12 +15,12 @@ class ControlPanel {
         })
 
         this._blueBotLog = new Log((message) => {
-            this._blueBotLogTextArea.textContent = this._blueBotLogTextArea.textContent + message;
+            this._blueBotLogTextArea.textContent += message;
             this._blueBotLogTextArea.scrollTop = this._blueBotLogTextArea.scrollHeight;
         });
 
         this._redBotLog = new Log((message) => {
-            this._redBotLogTextArea.textContent = this._redBotLogTextArea.textContent + message;
+            this._redBotLogTextArea.textContent += message;
             this._redBotLogTextArea.scrollTop = this._redBotLogTextArea.scrollHeight;
         });
     }
