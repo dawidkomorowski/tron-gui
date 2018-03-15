@@ -84,8 +84,10 @@ exit
 ```
 There is no response from bot expected. Bot should just shut down its process.
 
+Each response of bot should be send as full single line that is it should contain OS specific end of line characters.
+
 # Tron string notation
-Tron bot uses tron string notation to pass state of tron board to tron bot process. The following signage is used:
+Tron GUI uses tron string notation to pass state of tron board to tron bot process. The following signage is used:
 
 o - obstacle
 
