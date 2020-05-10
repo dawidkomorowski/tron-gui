@@ -4,7 +4,8 @@
   "description": "GUI platform for running Tron bots duels.",
   "main": "src/main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "test": "mocha"
   },
   "repository": "https://github.com/dawidkomorowski/tron-gui",
   "keywords": [
@@ -15,7 +16,8 @@
   "author": "Dawid Komorowski",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.8.8"
+    "electron": "^1.8.8",
+    "mocha": "^7.1.2"
   },
   "dependencies": {
     "proxyquire": "^2.1.3"
