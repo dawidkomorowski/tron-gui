@@ -35,12 +35,12 @@ class HostManager {
         this._controlPanel.runButtonDisabled = true;
         this._isRunning = true;
 
-        if (this._errorScope(TronBotColor.Blue, () => {
+        if (this._stopOnError(TronBotColor.Blue, () => {
             this._blueBot = new TronBot(TronBotColor.Blue, this._controlPanel.blueBotPath, this._controlPanel.blueBotLog);
         })) {
             return;
         }
-        if (this._errorScope(TronBotColor.Red, () => {
+        if (this._stopOnError(TronBotColor.Red, () => {
             this._redBot = new TronBot(TronBotColor.Red, this._controlPanel.redBotPath, this._controlPanel.redBotLog);
         })) {
             return;
@@ -49,12 +49,12 @@ class HostManager {
         let blueBotPromise;
         let redBotPromise;
 
-        if (this._errorScope(TronBotColor.Blue, () => {
+        if (this._stopOnError(TronBotColor.Blue, () => {
             blueBotPromise = this._blueBot.start();
         })) {
             return;
         }
-        if (this._errorScope(TronBotColor.Red, () => {
+        if (this._stopOnError(TronBotColor.Red, () => {
             redBotPromise = this._redBot.start();
         })) {
             return;
@@ -101,11 +101,21 @@ class HostManager {
     _stop() {
         this._controlPanel.runButtonDisabled = false;
         this._isRunning = false;
-        this._blueBot.stop();
-        this._redBot.stop();
+
+        if (this._blueBot) {
+            this._catchAndLogErrors(TronBotColor.Blue, () => {
+                this._blueBot.stop();
+            });
+        }
+
+        if (this._redBot) {
+            this._catchAndLogErrors(TronBotColor.Red, () => {
+                this._redBot.stop();
+            });
+        }
     }
 
-    _errorScope(color, action) {
+    _catchAndLogErrors(color, action) {
         try {
             action();
         } catch (error) {
@@ -121,16 +131,16 @@ class HostManager {
                     throw new Error("color must be either Blue or Red.");
             }
             log.error(error);
-            this._controlPanel.runButtonDisabled = false;
-            this._isRunning = false;
 
-            try {
-                this._stop();
-            }
-            catch (error) {
-                log.error(error);
-            }
+            return true;
+        }
 
+        return false;
+    }
+
+    _stopOnError(color, action) {
+        if (this._catchAndLogErrors(color, action)) {
+            this._stop();
             return true;
         }
 
