@@ -1,8 +1,10 @@
+const EOL = require("os").EOL;
+
 class TronString {
     constructor() {
         if (arguments.length === 0) {
-            throw new Error("No constructor overload takes 0 parameters.\n" +
-                "Provide string (tron string format) parameter to create from tron string.\n" +
+            throw new Error(`No constructor overload takes 0 parameters.${EOL}` +
+                `Provide string (tron string format) parameter to create from tron string.${EOL}` +
                 "Provide width and height (numbers) parameters to create empty field of given dimension.");
         }
         else {

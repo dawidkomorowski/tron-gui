@@ -17,7 +17,7 @@ class Process {
             };
         });
 
-        this._internalProcess.stdin.write(message + "\n");
+        this._internalProcess.stdin.write(message + EOL);
 
         return promise;
     }
