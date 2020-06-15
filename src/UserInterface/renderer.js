@@ -3,11 +3,11 @@
 // All of the Node.js APIs are available in this process.
 
 const TronBoardRenderer = require("./tronBoardRenderer").TronBoardRenderer;
-const Process = require("./process").Process;
-const TronBot = require("./tronBot").TronBot;
-const TronBotColor = require("./tronBot").TronBotColor;
+const Process = require("../process").Process;
+const TronBot = require("../tronBot").TronBot;
+const TronBotColor = require("../tronBot").TronBotColor;
 const ControlPanel = require("./controlPanel").ControlPanel;
-const HostManager = require("./hostManager").HostManager;
+const HostManager = require("../hostManager").HostManager;
 
 const tronBoardRenderer = new TronBoardRenderer("tron-board-canvas");
 const controlPanel = new ControlPanel({

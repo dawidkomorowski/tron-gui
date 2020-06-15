@@ -1,4 +1,4 @@
-const TronStringEnum = require("./tronString").TronStringEnum;
+const TronStringEnum = require("../tronString").TronStringEnum;
 
 class TronBoardRenderer {
     constructor(canvasId) {

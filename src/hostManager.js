@@ -1,5 +1,5 @@
-const TronBoardRenderer = require("./tronBoardRenderer").TronBoardRenderer;
-const ControlPanel = require("./controlPanel").ControlPanel;
+const TronBoardRenderer = require("./UserInterface/tronBoardRenderer").TronBoardRenderer;
+const ControlPanel = require("./UserInterface/controlPanel").ControlPanel;
 const TronString = require("./tronString").TronString;
 const TronBoard = require("./tronBoard").TronBoard;
 const TronMove = require("./tronBoard").TronMove;

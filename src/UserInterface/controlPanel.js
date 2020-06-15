@@ -1,4 +1,4 @@
-const Log = require("./log").Log;
+const Log = require("../log").Log;
 
 class ControlPanel {
     constructor(controlsIds) {
