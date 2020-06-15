@@ -18,5 +18,3 @@ const controlPanel = new ControlPanel({
     redBotLogTextArea: "red-bot-log"
 });
 const hostManager = new HostManager(tronBoardRenderer, controlPanel);
-
-// C:\Users\Dawid Komorowski\source\repos\TbiTester\TbiTester\bin\Debug\TbiTester.exe

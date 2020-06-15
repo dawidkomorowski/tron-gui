@@ -15,12 +15,12 @@ class ControlPanel {
         })
 
         this._blueBotLog = new Log((message) => {
-            this._blueBotLogTextArea.textContent += message;
+            this._blueBotLogTextArea.value += message;
             this._blueBotLogTextArea.scrollTop = this._blueBotLogTextArea.scrollHeight;
         });
 
         this._redBotLog = new Log((message) => {
-            this._redBotLogTextArea.textContent += message;
+            this._redBotLogTextArea.value += message;
             this._redBotLogTextArea.scrollTop = this._redBotLogTextArea.scrollHeight;
         });
     }
@@ -31,6 +31,11 @@ class ControlPanel {
     set runButtonDisabled(disabled) { this._runButton.disabled = disabled; }
     get blueBotLog() { return this._blueBotLog; }
     get redBotLog() { return this._redBotLog; }
+
+    clearLogs() {
+        this._blueBotLogTextArea.value = "";
+        this._redBotLogTextArea.value = "";
+    }
 }
 
 module.exports = {

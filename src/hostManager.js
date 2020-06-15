@@ -17,7 +17,6 @@ class HostManager {
 
         this._tronBoardRenderer = tronBoardRenderer;
         this._controlPanel = controlPanel;
-        this._isRunning = false;
 
         this._controlPanel.runButtonHandler = () => {
             this._runButtonHandler();
@@ -27,13 +26,11 @@ class HostManager {
     }
 
     _runButtonHandler() {
-        if (this._isRunning) {
-            return;
-        }
+        this._controlPanel.clearLogs();
+        this._stop();
         this._initialSetup();
 
         this._controlPanel.runButtonDisabled = true;
-        this._isRunning = true;
 
         if (this._stopOnError(TronBotColor.Blue, () => {
             this._blueBot = new TronBot(TronBotColor.Blue, this._controlPanel.blueBotPath, this._controlPanel.blueBotLog);
@@ -100,7 +97,6 @@ class HostManager {
 
     _stop() {
         this._controlPanel.runButtonDisabled = false;
-        this._isRunning = false;
 
         if (this._blueBot) {
             this._catchAndLogErrors(TronBotColor.Blue, () => {
