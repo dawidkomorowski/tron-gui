@@ -15,9 +15,19 @@ class Process {
                 resolve(data);
                 this._responseHandler = null;
             };
-        });
 
-        this._internalProcess.stdin.write(message + EOL);
+            const timeout = 5000;
+            setTimeout(() => {
+                reject(new Error(`Communication with process timed out after ${timeout} ms.`))
+            }, timeout)
+
+            try {
+                this._internalProcess.stdin.write(message + EOL);
+
+            } catch (error) {
+                reject(error);
+            }
+        });
 
         return promise;
     }

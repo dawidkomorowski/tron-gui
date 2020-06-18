@@ -14,7 +14,7 @@ function createProcessMock() {
                     resolve(this.responses[message].response);
                 }
                 else {
-                    reject();
+                    reject(new Error());
                 }
             });
         },
@@ -47,6 +47,21 @@ function createSUT() {
         ProcessMock: processMock,
         TronBot: TronBot
     }
+}
+
+function configureHappyPath(processMock) {
+    processMock.responses["tbi"] = {
+        ok: true,
+        response: "tbi ok"
+    };
+    processMock.responses["tbi v1"] = {
+        ok: true,
+        response: "tbi v1 ok"
+    };
+    processMock.responses["color blue"] = {
+        ok: true,
+        response: "color ok"
+    };
 }
 
 describe("TronBot", () => {
@@ -201,18 +216,7 @@ describe("TronBot", () => {
             const TronBot = sut.TronBot;
             const ProcessMock = sut.ProcessMock;
 
-            ProcessMock.responses["tbi"] = {
-                ok: true,
-                response: "tbi ok"
-            };
-            ProcessMock.responses["tbi v1"] = {
-                ok: true,
-                response: "tbi v1 ok"
-            };
-            ProcessMock.responses["color blue"] = {
-                ok: true,
-                response: "color ok"
-            };
+            configureHappyPath(ProcessMock);
 
             const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
             tronBot.start().then(() => {
@@ -226,6 +230,25 @@ describe("TronBot", () => {
                 done();
             });
         });
+        it("should send message 'tbi' and on error should close process and reject promise", (done) => {
+            const sut = createSUT();
+            const TronBot = sut.TronBot;
+            const ProcessMock = sut.ProcessMock;
+
+            configureHappyPath(ProcessMock);
+
+            ProcessMock.responses["tbi"].ok = false;
+
+            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            tronBot.start().then(() => {
+                assert.fail();
+                done();
+            }, () => {
+                assert.equal(ProcessMock.messages[0], "tbi");
+                assert.equal(ProcessMock.closed, true);
+                done();
+            });
+        });
     });
     describe("#makeMove", () => {
         it("should send message 'move 4/4/4/4' and on response 'up' should return TronMoveDirection.Up", (done) => {
@@ -233,18 +256,8 @@ describe("TronBot", () => {
             const TronBot = sut.TronBot;
             const ProcessMock = sut.ProcessMock;
 
-            ProcessMock.responses["tbi"] = {
-                ok: true,
-                response: "tbi ok"
-            };
-            ProcessMock.responses["tbi v1"] = {
-                ok: true,
-                response: "tbi v1 ok"
-            };
-            ProcessMock.responses["color blue"] = {
-                ok: true,
-                response: "color ok"
-            };
+            configureHappyPath(ProcessMock);
+
             ProcessMock.responses["move 4/4/4/4"] = {
                 ok: true,
                 response: "up"
@@ -255,16 +268,13 @@ describe("TronBot", () => {
             const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
             tronBot.start().then(() => {
                 ProcessMock.messages = [];
-                tronBot.makeMove(tronString).then((move) => {
-                    assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
-                    assert.equal(move, TronMoveDirection.Up);
-                    done();
-                }, () => {
-                    assert.fail();
-                    done();
-                });
-            }, () => {
-                assert.fail();
+                return tronBot.makeMove(tronString);
+            }).then(move => {
+                assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
+                assert.equal(move, TronMoveDirection.Up);
+                done();
+            }).catch(error => {
+                assert.fail(error);
                 done();
             });
         });
@@ -273,18 +283,8 @@ describe("TronBot", () => {
             const TronBot = sut.TronBot;
             const ProcessMock = sut.ProcessMock;
 
-            ProcessMock.responses["tbi"] = {
-                ok: true,
-                response: "tbi ok"
-            };
-            ProcessMock.responses["tbi v1"] = {
-                ok: true,
-                response: "tbi v1 ok"
-            };
-            ProcessMock.responses["color blue"] = {
-                ok: true,
-                response: "color ok"
-            };
+            configureHappyPath(ProcessMock);
+
             ProcessMock.responses["move 4/4/4/4"] = {
                 ok: true,
                 response: "down"
@@ -295,16 +295,13 @@ describe("TronBot", () => {
             const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
             tronBot.start().then(() => {
                 ProcessMock.messages = [];
-                tronBot.makeMove(tronString).then((move) => {
-                    assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
-                    assert.equal(move, TronMoveDirection.Down);
-                    done();
-                }, () => {
-                    assert.fail();
-                    done();
-                });
-            }, () => {
-                assert.fail();
+                return tronBot.makeMove(tronString);
+            }).then(move => {
+                assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
+                assert.equal(move, TronMoveDirection.Down);
+                done();
+            }).catch(error => {
+                assert.fail(error);
                 done();
             });
         });
@@ -313,18 +310,8 @@ describe("TronBot", () => {
             const TronBot = sut.TronBot;
             const ProcessMock = sut.ProcessMock;
 
-            ProcessMock.responses["tbi"] = {
-                ok: true,
-                response: "tbi ok"
-            };
-            ProcessMock.responses["tbi v1"] = {
-                ok: true,
-                response: "tbi v1 ok"
-            };
-            ProcessMock.responses["color blue"] = {
-                ok: true,
-                response: "color ok"
-            };
+            configureHappyPath(ProcessMock);
+            
             ProcessMock.responses["move 4/4/4/4"] = {
                 ok: true,
                 response: "left"
@@ -335,16 +322,13 @@ describe("TronBot", () => {
             const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
             tronBot.start().then(() => {
                 ProcessMock.messages = [];
-                tronBot.makeMove(tronString).then((move) => {
-                    assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
-                    assert.equal(move, TronMoveDirection.Left);
-                    done();
-                }, () => {
-                    assert.fail();
-                    done();
-                });
-            }, () => {
-                assert.fail();
+                return tronBot.makeMove(tronString);
+            }).then(move => {
+                assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
+                assert.equal(move, TronMoveDirection.Left);
+                done();
+            }).catch(error => {
+                assert.fail(error);
                 done();
             });
         });
@@ -353,18 +337,8 @@ describe("TronBot", () => {
             const TronBot = sut.TronBot;
             const ProcessMock = sut.ProcessMock;
 
-            ProcessMock.responses["tbi"] = {
-                ok: true,
-                response: "tbi ok"
-            };
-            ProcessMock.responses["tbi v1"] = {
-                ok: true,
-                response: "tbi v1 ok"
-            };
-            ProcessMock.responses["color blue"] = {
-                ok: true,
-                response: "color ok"
-            };
+            configureHappyPath(ProcessMock);
+            
             ProcessMock.responses["move 4/4/4/4"] = {
                 ok: true,
                 response: "right"
@@ -375,16 +349,40 @@ describe("TronBot", () => {
             const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
             tronBot.start().then(() => {
                 ProcessMock.messages = [];
-                tronBot.makeMove(tronString).then((move) => {
-                    assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
-                    assert.equal(move, TronMoveDirection.Right);
-                    done();
-                }, () => {
-                    assert.fail();
-                    done();
-                });
-            }, () => {
-                assert.fail();
+                return tronBot.makeMove(tronString);
+            }).then(move => {
+                assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
+                assert.equal(move, TronMoveDirection.Right);
+                done();
+            }).catch(error => {
+                assert.fail(error);
+                done();
+            });
+        });
+        it("should send message 'move 4/4/4/4' and on error should close process and reject promise", (done) => {
+            const sut = createSUT();
+            const TronBot = sut.TronBot;
+            const ProcessMock = sut.ProcessMock;
+
+            configureHappyPath(ProcessMock);
+
+            ProcessMock.responses["move 4/4/4/4"] = {
+                ok: false,
+                response: "up"
+            };
+
+            let tronString = new TronString(4, 4);
+
+            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            tronBot.start().then(() => {
+                ProcessMock.messages = [];
+                return tronBot.makeMove(tronString);
+            }).then(() => {
+                assert.fail(error);
+                done();
+            }).catch(() => {
+                assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
+                assert.equal(ProcessMock.closed, true);
                 done();
             });
         });
@@ -395,18 +393,7 @@ describe("TronBot", () => {
             const TronBot = sut.TronBot;
             const ProcessMock = sut.ProcessMock;
 
-            ProcessMock.responses["tbi"] = {
-                ok: true,
-                response: "tbi ok"
-            };
-            ProcessMock.responses["tbi v1"] = {
-                ok: true,
-                response: "tbi v1 ok"
-            };
-            ProcessMock.responses["color blue"] = {
-                ok: true,
-                response: "color ok"
-            };
+            configureHappyPath(ProcessMock);
 
             const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
             tronBot.start().then(() => {

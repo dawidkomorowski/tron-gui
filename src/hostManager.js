@@ -27,7 +27,6 @@ class HostManager {
 
     _runButtonHandler() {
         this._controlPanel.clearLogs();
-        this._stop();
         this._initialSetup();
 
         this._controlPanel.runButtonDisabled = true;
@@ -43,21 +42,7 @@ class HostManager {
             return;
         }
 
-        let blueBotPromise;
-        let redBotPromise;
-
-        if (this._stopOnError(TronBotColor.Blue, () => {
-            blueBotPromise = this._blueBot.start();
-        })) {
-            return;
-        }
-        if (this._stopOnError(TronBotColor.Red, () => {
-            redBotPromise = this._redBot.start();
-        })) {
-            return;
-        }
-
-        Promise.all([blueBotPromise, redBotPromise]).then(() => {
+        Promise.all([this._blueBot.start(), this._redBot.start()]).then(() => {
             this._makeMove();
         }, () => {
             this._stop();

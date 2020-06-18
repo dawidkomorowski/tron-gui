@@ -34,45 +34,35 @@ class TronBot {
         this._process = createProcess(this._path);
 
         this._log.info("Negotiating tron bot interface.")
-        const initialPromise = this._process.sendMessage("tbi");
 
-        return new Promise((resolve, reject) => {
-            initialPromise.then(data => {
-                if (data === "tbi ok") {
-                    this._log.info("Tron bot interface accepted.")
-                    this._log.info("Negotiating interface version.")
-                    this._process.sendMessage("tbi v1").then(data => {
-                        if (data === "tbi v1 ok") {
-                            this._log.info("Tron bot interface version 1 accepted.");
-                            this._protocol = "tbi v1";
-                            this._log.info(this._color + " color assignment requested.");
-                            this._process.sendMessage("color " + this._encodeColor()).then(data => {
-                                if (data === "color ok") {
-                                    this._log.info(this._color + " color assignment accepted.");
-                                    this._log.info("Tron bot started successfully.");
-                                    resolve();
-                                }
-                                else {
-                                    this._log.error("Color assignment rejected.")
-                                    this._forceCloseProcess();
-                                    reject();
-                                }
-                            });
-                        }
-                        else {
-                            this._log.error("Tron bot interface version 1 is not supported.")
-                            this._forceCloseProcess();
-                            reject();
-                        }
-                    });
-                }
-                else {
-                    this._log.error("Tron bot interface is not supported.")
-                    this._forceCloseProcess();
-                    reject();
-                }
-            });
-        });
+        return this._process.sendMessage("tbi").then(data => {
+            if (data === "tbi ok") {
+                this._log.info("Tron bot interface accepted.")
+                this._log.info("Negotiating interface version.")
+                return this._process.sendMessage("tbi v1");
+            }
+            else {
+                throw new Error("Tron bot interface is not supported.");
+            }
+        }).then(data => {
+            if (data === "tbi v1 ok") {
+                this._log.info("Tron bot interface version 1 accepted.");
+                this._protocol = "tbi v1";
+                this._log.info(this._color + " color assignment requested.");
+                return this._process.sendMessage("color " + this._encodeColor());
+            }
+            else {
+                throw new Error("Tron bot interface version 1 is not supported.")
+            }
+        }).then(data => {
+            if (data === "color ok") {
+                this._log.info(this._color + " color assignment accepted.");
+                this._log.info("Tron bot started successfully.");
+            }
+            else {
+                throw new Error("Color assignment rejected.")
+            }
+        }).catch(this._createCatchHandler());
     }
 
     makeMove(tronString) {
@@ -96,11 +86,9 @@ class TronBot {
                 case "right":
                     return TronMoveDirection.Right;
                 default:
-                    this._log.error(data + " is invalid move response.")
-                    this._forceCloseProcess();
-                    throw new Error("Invalid move response.");
+                    throw new Error(data + " is invalid move response.");
             }
-        });
+        }).catch(this._createCatchHandler());
     }
 
     stop() {
@@ -109,7 +97,7 @@ class TronBot {
         }
 
         this._log.info("Tron bot is being stopped.");
-        this._process.sendMessage("exit");
+        this._process.sendMessage("exit").catch(this._createCatchHandler());
         this._process = null;
     }
 
@@ -125,6 +113,14 @@ class TronBot {
                 return "blue";
             case TronBotColor.Red:
                 return "red";
+        }
+    }
+
+    _createCatchHandler() {
+        return error => {
+            this._log.error(error.message);
+            this._forceCloseProcess();
+            return Promise.reject(error);
         }
     }
 }
