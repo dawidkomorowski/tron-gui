@@ -16,7 +16,7 @@
   "author": "Dawid Komorowski",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^1.8.8",
+    "electron": "^9.4.0",
     "mocha": "^7.2.0"
   },
   "dependencies": {
