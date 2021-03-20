@@ -110,7 +110,7 @@ describe("TronBot", () => {
             const TronBot = createSUT().TronBot;
             const config = new TronBotConfig("some-path");
             const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
-            assert.equal(typeof tronBot, "object"); // TODO Change assert.equal to assert.strictEqual.
+            assert.strictEqual(typeof tronBot, "object");
         });
     });
     describe("#start", () => {
@@ -122,7 +122,7 @@ describe("TronBot", () => {
             const config = new TronBotConfig("some-path");
             const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start();
-            assert.equal(ProcessMock.path, "some-path");
+            assert.strictEqual(ProcessMock.path, "some-path");
         });
         it("should send message 'tbi' and on response other than 'tbi ok' should close process and reject promise", (done) => {
             const sut = createSUT();
@@ -140,8 +140,8 @@ describe("TronBot", () => {
                 assert.fail();
                 done();
             }, () => {
-                assert.equal(ProcessMock.messages[0], "tbi");
-                assert.equal(ProcessMock.closed, true);
+                assert.strictEqual(ProcessMock.messages[0], "tbi");
+                assert.strictEqual(ProcessMock.closed, true);
                 done();
             });
         });
@@ -165,9 +165,9 @@ describe("TronBot", () => {
                 assert.fail();
                 done();
             }, () => {
-                assert.equal(ProcessMock.messages[0], "tbi");
-                assert.equal(ProcessMock.messages[1], "tbi v1");
-                assert.equal(ProcessMock.closed, true);
+                assert.strictEqual(ProcessMock.messages[0], "tbi");
+                assert.strictEqual(ProcessMock.messages[1], "tbi v1");
+                assert.strictEqual(ProcessMock.closed, true);
                 done();
             });
         });
@@ -195,10 +195,10 @@ describe("TronBot", () => {
                 assert.fail();
                 done();
             }, () => {
-                assert.equal(ProcessMock.messages[0], "tbi");
-                assert.equal(ProcessMock.messages[1], "tbi v1");
-                assert.equal(ProcessMock.messages[2], "color blue");
-                assert.equal(ProcessMock.closed, true);
+                assert.strictEqual(ProcessMock.messages[0], "tbi");
+                assert.strictEqual(ProcessMock.messages[1], "tbi v1");
+                assert.strictEqual(ProcessMock.messages[2], "color blue");
+                assert.strictEqual(ProcessMock.closed, true);
                 done();
             });
         });
@@ -226,10 +226,10 @@ describe("TronBot", () => {
                 assert.fail();
                 done();
             }, () => {
-                assert.equal(ProcessMock.messages[0], "tbi");
-                assert.equal(ProcessMock.messages[1], "tbi v1");
-                assert.equal(ProcessMock.messages[2], "color red");
-                assert.equal(ProcessMock.closed, true);
+                assert.strictEqual(ProcessMock.messages[0], "tbi");
+                assert.strictEqual(ProcessMock.messages[1], "tbi v1");
+                assert.strictEqual(ProcessMock.messages[2], "color red");
+                assert.strictEqual(ProcessMock.closed, true);
                 done();
             });
         });
@@ -243,10 +243,10 @@ describe("TronBot", () => {
             const config = new TronBotConfig("some-path");
             const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start().then(() => {
-                assert.equal(ProcessMock.messages[0], "tbi");
-                assert.equal(ProcessMock.messages[1], "tbi v1");
-                assert.equal(ProcessMock.messages[2], "color blue");
-                assert.equal(ProcessMock.closed, false);
+                assert.strictEqual(ProcessMock.messages[0], "tbi");
+                assert.strictEqual(ProcessMock.messages[1], "tbi v1");
+                assert.strictEqual(ProcessMock.messages[2], "color blue");
+                assert.strictEqual(ProcessMock.closed, false);
                 done();
             }, () => {
                 assert.fail();
@@ -268,8 +268,8 @@ describe("TronBot", () => {
                 assert.fail();
                 done();
             }, () => {
-                assert.equal(ProcessMock.messages[0], "tbi");
-                assert.equal(ProcessMock.closed, true);
+                assert.strictEqual(ProcessMock.messages[0], "tbi");
+                assert.strictEqual(ProcessMock.closed, true);
                 done();
             });
         });
@@ -295,8 +295,8 @@ describe("TronBot", () => {
                 ProcessMock.messages = [];
                 return tronBot.makeMove(tronString);
             }).then(move => {
-                assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
-                assert.equal(move, TronMoveDirection.Up);
+                assert.strictEqual(ProcessMock.messages[0], "move 4/4/4/4");
+                assert.strictEqual(move, TronMoveDirection.Up);
                 done();
             }).catch(error => {
                 assert.fail(error);
@@ -323,8 +323,8 @@ describe("TronBot", () => {
                 ProcessMock.messages = [];
                 return tronBot.makeMove(tronString);
             }).then(move => {
-                assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
-                assert.equal(move, TronMoveDirection.Down);
+                assert.strictEqual(ProcessMock.messages[0], "move 4/4/4/4");
+                assert.strictEqual(move, TronMoveDirection.Down);
                 done();
             }).catch(error => {
                 assert.fail(error);
@@ -351,8 +351,8 @@ describe("TronBot", () => {
                 ProcessMock.messages = [];
                 return tronBot.makeMove(tronString);
             }).then(move => {
-                assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
-                assert.equal(move, TronMoveDirection.Left);
+                assert.strictEqual(ProcessMock.messages[0], "move 4/4/4/4");
+                assert.strictEqual(move, TronMoveDirection.Left);
                 done();
             }).catch(error => {
                 assert.fail(error);
@@ -379,8 +379,8 @@ describe("TronBot", () => {
                 ProcessMock.messages = [];
                 return tronBot.makeMove(tronString);
             }).then(move => {
-                assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
-                assert.equal(move, TronMoveDirection.Right);
+                assert.strictEqual(ProcessMock.messages[0], "move 4/4/4/4");
+                assert.strictEqual(move, TronMoveDirection.Right);
                 done();
             }).catch(error => {
                 assert.fail(error);
@@ -410,8 +410,8 @@ describe("TronBot", () => {
                 assert.fail(error);
                 done();
             }).catch(() => {
-                assert.equal(ProcessMock.messages[0], "move 4/4/4/4");
-                assert.equal(ProcessMock.closed, true);
+                assert.strictEqual(ProcessMock.messages[0], "move 4/4/4/4");
+                assert.strictEqual(ProcessMock.closed, true);
                 done();
             });
         });
@@ -430,7 +430,7 @@ describe("TronBot", () => {
                 ProcessMock.messages = [];
                 tronBot.stop();
 
-                assert.equal(ProcessMock.messages[0], "exit");
+                assert.strictEqual(ProcessMock.messages[0], "exit");
                 done();
             }, () => {
                 assert.fail();

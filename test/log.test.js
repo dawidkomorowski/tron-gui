@@ -18,7 +18,7 @@ describe("Log", () => {
 
         it("constructor(() => {}) should create Log instance", () => {
             const log = new Log(() => { });
-            assert.equal(typeof log, "object");
+            assert.strictEqual(typeof log, "object");
         });
     });
 
@@ -31,7 +31,7 @@ describe("Log", () => {
 
             log.info("some message");
 
-            assert.equal(infoMessage, "INFO: some message" + EOL)
+            assert.strictEqual(infoMessage, "INFO: some message" + EOL)
         });
     });
 
@@ -44,7 +44,7 @@ describe("Log", () => {
 
             log.error("some message");
 
-            assert.equal(infoMessage, "ERROR: some message" + EOL)
+            assert.strictEqual(infoMessage, "ERROR: some message" + EOL)
         });
     });
 });
