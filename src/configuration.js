@@ -6,6 +6,17 @@ class Configuration {
 
     get blueBotConfig() { return this._blueBotConfig; }
     get redBotConfig() { return this._redBotConfig; }
+
+    static readFromFile(path) {
+        return new Configuration(
+            new TronBotConfig("blue-path"),
+            new TronBotConfig("red-path")
+        );
+    }
+
+    static writeToFile(path, configuration) {
+
+    }
 }
 
 class TronBotConfig {

@@ -3,9 +3,6 @@
 // All of the Node.js APIs are available in this process.
 
 const TronBoardRenderer = require("./tronBoardRenderer").TronBoardRenderer;
-const Process = require("../process").Process;
-const TronBot = require("../tronBot").TronBot;
-const TronBotColor = require("../tronBot").TronBotColor;
 const ControlPanel = require("./controlPanel").ControlPanel;
 const HostManager = require("../hostManager").HostManager;
 
@@ -18,3 +15,7 @@ const controlPanel = new ControlPanel({
     redBotLogTextArea: "red-bot-log"
 });
 const hostManager = new HostManager(tronBoardRenderer, controlPanel);
+
+window.onbeforeunload = () => {
+    hostManager.onAppClosing();
+}

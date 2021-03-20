@@ -5,6 +5,9 @@ const TronBoard = require("./tronBoard").TronBoard;
 const TronMove = require("./tronBoard").TronMove;
 const TronBot = require("./tronBot").TronBot;
 const TronBotColor = require("./tronBot").TronBotColor;
+const Configuration = require("./configuration").Configuration;
+
+const ConfigFilePath = "tron-gui-config.json";
 
 class HostManager {
     constructor(tronBoardRenderer, controlPanel) {
@@ -22,7 +25,14 @@ class HostManager {
             this._runButtonHandler();
         };
 
+        this._controlPanel.setConfiguration(Configuration.readFromFile(ConfigFilePath));
+
         this._initialSetup();
+    }
+
+    onAppClosing() {
+        const configuration = this._controlPanel.getConfiguration();
+        Configuration.writeToFile(ConfigFilePath, configuration);
     }
 
     _runButtonHandler() {
