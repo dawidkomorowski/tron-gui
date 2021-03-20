@@ -1,4 +1,7 @@
 node_modules
 
+# Ignore user configuraion
+tron-gui-config.json
+
 # Ignore files created by tests
 test/workingDir 
