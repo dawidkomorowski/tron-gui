@@ -8,13 +8,7 @@ const ResultsControl = require("./resultsControl").ResultsControl;
 const HostManager = require("../hostManager").HostManager;
 
 const tronBoardRenderer = new TronBoardRenderer("tron-board-canvas");
-const controlPanel = new ControlPanel({
-    blueBotPathInput: "blue-bot-path",
-    redBotPathInput: "red-bot-path",
-    runButton: "run-button",
-    blueBotLogTextArea: "blue-bot-log",
-    redBotLogTextArea: "red-bot-log"
-});
+const controlPanel = new ControlPanel("control-panel");
 const resultsControl = new ResultsControl("results-control")
 const hostManager = new HostManager(tronBoardRenderer, controlPanel, resultsControl);
 

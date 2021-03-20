@@ -3,12 +3,13 @@ const Configuration = require("../configuration").Configuration;
 const TronBotConfig = require("../configuration").TronBotConfig;
 
 class ControlPanel {
-    constructor(controlsIds) {
-        this._blueBotPathInput = document.getElementById(controlsIds.blueBotPathInput);
-        this._redBotPathInput = document.getElementById(controlsIds.redBotPathInput);
-        this._runButton = document.getElementById(controlsIds.runButton);
-        this._blueBotLogTextArea = document.getElementById(controlsIds.blueBotLogTextArea);
-        this._redBotLogTextArea = document.getElementById(controlsIds.redBotLogTextArea);
+    constructor(rootElementId) {
+        const rootElement = document.getElementById(rootElementId);
+        this._blueBotPathInput = rootElement.querySelector("#blue-bot-path");
+        this._redBotPathInput = rootElement.querySelector("#red-bot-path");
+        this._runButton = rootElement.querySelector("#run-button");
+        this._blueBotLogTextArea = rootElement.querySelector("#blue-bot-log");
+        this._redBotLogTextArea = rootElement.querySelector("#red-bot-log");
 
         this._runButton.addEventListener("click", event => {
             if (this._runButtonHandler) {
