@@ -44,8 +44,9 @@ class ControlPanel {
         );
     }
 
-    setConfiguration() {
-
+    setConfiguration(configuration) {
+        this._blueBotPathInput.value = configuration.blueBotConfig.path;
+        this._redBotPathInput.value = configuration.redBotConfig.path;
     }
 }
 
