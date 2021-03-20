@@ -1,1 +1,4 @@
 node_modules
+
+# Ignore files created by tests
+test/workingDir 
