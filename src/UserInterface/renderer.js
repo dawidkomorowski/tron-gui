@@ -4,6 +4,7 @@
 
 const TronBoardRenderer = require("./tronBoardRenderer").TronBoardRenderer;
 const ControlPanel = require("./controlPanel").ControlPanel;
+const ResultsControl = require("./resultsControl").ResultsControl;
 const HostManager = require("../hostManager").HostManager;
 
 const tronBoardRenderer = new TronBoardRenderer("tron-board-canvas");
@@ -14,7 +15,8 @@ const controlPanel = new ControlPanel({
     blueBotLogTextArea: "blue-bot-log",
     redBotLogTextArea: "red-bot-log"
 });
-const hostManager = new HostManager(tronBoardRenderer, controlPanel);
+const resultsControl = new ResultsControl("results-control")
+const hostManager = new HostManager(tronBoardRenderer, controlPanel, resultsControl);
 
 window.onbeforeunload = () => {
     hostManager.onAppClosing();

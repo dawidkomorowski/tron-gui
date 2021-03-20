@@ -1,5 +1,7 @@
 const TronBoardRenderer = require("./UserInterface/tronBoardRenderer").TronBoardRenderer;
 const ControlPanel = require("./UserInterface/controlPanel").ControlPanel;
+const ResultsControl = require("./UserInterface/resultsControl").ResultsControl;
+const Result = require("./UserInterface/resultsControl").Result;
 const TronString = require("./tronString").TronString;
 const TronBoard = require("./tronBoard").TronBoard;
 const TronMove = require("./tronBoard").TronMove;
@@ -10,16 +12,20 @@ const Configuration = require("./configuration").Configuration;
 const ConfigFilePath = "tron-gui-config.json";
 
 class HostManager {
-    constructor(tronBoardRenderer, controlPanel) {
+    constructor(tronBoardRenderer, controlPanel, resultsControl) {
         if (!(tronBoardRenderer instanceof TronBoardRenderer)) {
             throw new Error("tronBoardRenderer must be provided.");
         }
         if (!(controlPanel instanceof ControlPanel)) {
             throw new Error("controlPanel must be provided.");
         }
+        if (!(resultsControl instanceof ResultsControl)) {
+            throw new Error("resultsControl must be provided.")
+        }
 
         this._tronBoardRenderer = tronBoardRenderer;
         this._controlPanel = controlPanel;
+        this._resultsControl = resultsControl;
 
         this._controlPanel.runButtonHandler = () => {
             this._runButtonHandler();
@@ -69,7 +75,9 @@ class HostManager {
     }
 
     _makeMove() {
-        Promise.all([this._blueBot.makeMove(this._tronBoard.toTronString()), this._redBot.makeMove(this._tronBoard.toTronString())]).then((moves) => {
+        const blueMovePromise = this._blueBot.makeMove(this._tronBoard.toTronString());
+        const redMovePromise = this._redBot.makeMove(this._tronBoard.toTronString());
+        Promise.all([blueMovePromise, redMovePromise]).then((moves) => {
             const tronMove = new TronMove(moves[0], moves[1]);
             this._tronBoard.makeMove(tronMove);
             this._tronBoardRenderer.render();
@@ -82,6 +90,8 @@ class HostManager {
                     this._controlPanel.redBotLog.info("Red bot crashed!");
                 }
 
+                this._appendResult(this._tronBoard.isBlueAlive, this._tronBoard.isRedAlive);
+
                 this._stop();
             }
             else {
@@ -90,6 +100,21 @@ class HostManager {
         }, () => {
             this._stop();
         });
+    }
+
+    _appendResult(blueIsAlive, redIsAlive) {
+        if (blueIsAlive && redIsAlive) {
+            throw new Error("Assertion error. Blue and Red cannot be both alive when game is over.")
+        }
+        if (blueIsAlive && !redIsAlive) {
+            this._resultsControl.appendResult(Result.BlueWon);
+        }
+        if (!blueIsAlive && redIsAlive) {
+            this._resultsControl.appendResult(Result.RedWon);
+        }
+        if (!blueIsAlive && !redIsAlive) {
+            this._resultsControl.appendResult(Result.Draw);
+        }
     }
 
     _stop() {
