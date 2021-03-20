@@ -4,6 +4,7 @@ const Log = require("../src/log").Log;
 const TronBotColor = require("../src/tronBot").TronBotColor;
 const TronString = require("../src/tronString").TronString;
 const TronMoveDirection = require("../src/tronBoard").TronMoveDirection;
+const TronBotConfig = require("../src/configuration").TronBotConfig;
 
 function createProcessMock() {
     return {
@@ -82,18 +83,34 @@ describe("TronBot", () => {
             const TronBot = createSUT().TronBot;
             assert.throws(() => {
                 const tronBot = new TronBot(TronBotColor.Blue);
-            }, /path must be provided/);
+            }, /config must be provided/);
         });
-        it('constructor(TronBotColor.Blue, "some-path") should throw error', () => {
+        it("constructor(TronBotColor.Blue, config) should throw error given config with null path", () => {
             const TronBot = createSUT().TronBot;
+            const config = new TronBotConfig(null);
             assert.throws(() => {
-                const tronBot = new TronBot(TronBotColor.Blue, "some-path");
+                const tronBot = new TronBot(TronBotColor.Blue, config);
+            }, /config.path must be provided/);
+        });
+        it("constructor(TronBotColor.Blue, config) should throw error given config with empty path", () => {
+            const TronBot = createSUT().TronBot;
+            const config = new TronBotConfig("");
+            assert.throws(() => {
+                const tronBot = new TronBot(TronBotColor.Blue, config);
+            }, /config.path must be provided/);
+        });
+        it('constructor(TronBotColor.Blue, config) should throw error', () => {
+            const TronBot = createSUT().TronBot;
+            const config = new TronBotConfig("some-path");
+            assert.throws(() => {
+                const tronBot = new TronBot(TronBotColor.Blue, config);
             }, /log must be provided/);
         });
-        it("should create new instance given path and log", () => {
+        it("should create new instance given color, config and log", () => {
             const TronBot = createSUT().TronBot;
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
-            assert.equal(typeof tronBot, "object");
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
+            assert.equal(typeof tronBot, "object"); // TODO Change assert.equal to assert.strictEqual.
         });
     });
     describe("#start", () => {
@@ -102,7 +119,8 @@ describe("TronBot", () => {
             const TronBot = sut.TronBot;
             const ProcessMock = sut.ProcessMock;
 
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start();
             assert.equal(ProcessMock.path, "some-path");
         });
@@ -116,7 +134,8 @@ describe("TronBot", () => {
                 response: "tbi n/a"
             };
 
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start().then(() => {
                 assert.fail();
                 done();
@@ -140,7 +159,8 @@ describe("TronBot", () => {
                 response: "tbi v1 n/a"
             };
 
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start().then(() => {
                 assert.fail();
                 done();
@@ -169,7 +189,8 @@ describe("TronBot", () => {
                 response: "color n/a"
             };
 
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start().then(() => {
                 assert.fail();
                 done();
@@ -199,7 +220,8 @@ describe("TronBot", () => {
                 response: "color n/a"
             };
 
-            const tronBot = new TronBot(TronBotColor.Red, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Red, config, createLog());
             tronBot.start().then(() => {
                 assert.fail();
                 done();
@@ -218,7 +240,8 @@ describe("TronBot", () => {
 
             configureHappyPath(ProcessMock);
 
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start().then(() => {
                 assert.equal(ProcessMock.messages[0], "tbi");
                 assert.equal(ProcessMock.messages[1], "tbi v1");
@@ -239,7 +262,8 @@ describe("TronBot", () => {
 
             ProcessMock.responses["tbi"].ok = false;
 
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start().then(() => {
                 assert.fail();
                 done();
@@ -265,7 +289,8 @@ describe("TronBot", () => {
 
             let tronString = new TronString(4, 4);
 
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start().then(() => {
                 ProcessMock.messages = [];
                 return tronBot.makeMove(tronString);
@@ -292,7 +317,8 @@ describe("TronBot", () => {
 
             let tronString = new TronString(4, 4);
 
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start().then(() => {
                 ProcessMock.messages = [];
                 return tronBot.makeMove(tronString);
@@ -311,7 +337,7 @@ describe("TronBot", () => {
             const ProcessMock = sut.ProcessMock;
 
             configureHappyPath(ProcessMock);
-            
+
             ProcessMock.responses["move 4/4/4/4"] = {
                 ok: true,
                 response: "left"
@@ -319,7 +345,8 @@ describe("TronBot", () => {
 
             let tronString = new TronString(4, 4);
 
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start().then(() => {
                 ProcessMock.messages = [];
                 return tronBot.makeMove(tronString);
@@ -338,7 +365,7 @@ describe("TronBot", () => {
             const ProcessMock = sut.ProcessMock;
 
             configureHappyPath(ProcessMock);
-            
+
             ProcessMock.responses["move 4/4/4/4"] = {
                 ok: true,
                 response: "right"
@@ -346,7 +373,8 @@ describe("TronBot", () => {
 
             let tronString = new TronString(4, 4);
 
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start().then(() => {
                 ProcessMock.messages = [];
                 return tronBot.makeMove(tronString);
@@ -373,7 +401,8 @@ describe("TronBot", () => {
 
             let tronString = new TronString(4, 4);
 
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start().then(() => {
                 ProcessMock.messages = [];
                 return tronBot.makeMove(tronString);
@@ -395,7 +424,8 @@ describe("TronBot", () => {
 
             configureHappyPath(ProcessMock);
 
-            const tronBot = new TronBot(TronBotColor.Blue, "some-path", createLog());
+            const config = new TronBotConfig("some-path");
+            const tronBot = new TronBot(TronBotColor.Blue, config, createLog());
             tronBot.start().then(() => {
                 ProcessMock.messages = [];
                 tronBot.stop();

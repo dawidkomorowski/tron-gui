@@ -31,13 +31,15 @@ class HostManager {
 
         this._controlPanel.runButtonDisabled = true;
 
+        const configuration = this._controlPanel.getConfiguration();
+
         if (this._stopOnError(TronBotColor.Blue, () => {
-            this._blueBot = new TronBot(TronBotColor.Blue, this._controlPanel.blueBotPath, this._controlPanel.blueBotLog);
+            this._blueBot = new TronBot(TronBotColor.Blue, configuration.blueBotConfig, this._controlPanel.blueBotLog);
         })) {
             return;
         }
         if (this._stopOnError(TronBotColor.Red, () => {
-            this._redBot = new TronBot(TronBotColor.Red, this._controlPanel.redBotPath, this._controlPanel.redBotLog);
+            this._redBot = new TronBot(TronBotColor.Red, configuration.redBotConfig, this._controlPanel.redBotLog);
         })) {
             return;
         }

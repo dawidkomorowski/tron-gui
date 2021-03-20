@@ -1,4 +1,6 @@
 const Log = require("../log").Log;
+const Configuration = require("../configuration").Configuration;
+const TronBotConfig = require("../configuration").TronBotConfig;
 
 class ControlPanel {
     constructor(controlsIds) {
@@ -25,8 +27,6 @@ class ControlPanel {
         });
     }
 
-    get blueBotPath() { return this._blueBotPathInput.value; }
-    get redBotPath() { return this._redBotPathInput.value; }
     set runButtonHandler(handler) { this._runButtonHandler = handler; }
     set runButtonDisabled(disabled) { this._runButton.disabled = disabled; }
     get blueBotLog() { return this._blueBotLog; }
@@ -35,6 +35,17 @@ class ControlPanel {
     clearLogs() {
         this._blueBotLogTextArea.value = "";
         this._redBotLogTextArea.value = "";
+    }
+
+    getConfiguration() {
+        return new Configuration(
+            new TronBotConfig(this._blueBotPathInput.value),
+            new TronBotConfig(this._redBotPathInput.value)
+        );
+    }
+
+    setConfiguration() {
+
     }
 }
 

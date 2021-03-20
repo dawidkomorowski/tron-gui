@@ -2,24 +2,28 @@ const createProcess = require("./process").createProcess;
 const TronString = require("./tronString").TronString;
 const TronMoveDirection = require("./tronBoard").TronMoveDirection;
 const Log = require("./log").Log;
+const TronBotConfig = require("./configuration").TronBotConfig;
 
 class TronBot {
-    constructor(color, path, log) {
+    constructor(color, config, log) {
         if (!color) {
             throw new Error("color must be provided.")
         }
         if (color !== TronBotColor.Blue && color !== TronBotColor.Red) {
             throw new Error("color must be either Blue or Red.")
         }
-        if (!path) {
-            throw new Error("path must be provided.")
+        if (!(config instanceof TronBotConfig)) {
+            throw new Error("config must be provided.")
+        }
+        if (!config.path) {
+            throw new Error("config.path must be provided.")
         }
         if (!(log instanceof Log)) {
             throw new Error("log must be provided.");
         }
 
         this._color = color;
-        this._path = path;
+        this._config = config;
         this._log = log;
         this._protocol = null;
         this._process = null;
@@ -31,7 +35,7 @@ class TronBot {
         }
 
         this._log.info("Starting tron bot process...")
-        this._process = createProcess(this._path);
+        this._process = createProcess(this._config.path);
 
         this._log.info("Negotiating tron bot interface.")
 
