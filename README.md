@@ -1,3 +1,6 @@
+> [!IMPORTANT]
+> This repository has been archived and is read only.
+
 # Introduction
 Tron GUI is a graphical host for tron bot competition. A bot itself is a separate process and host uses text interface to communicate with the bot process through standard I/O.
 
